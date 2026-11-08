@@ -1,0 +1,40 @@
+CONTRATOS PIXEL ARTE - INICIAR SESION CON GOOGLE
+================================================
+Ya no se usa Apps Script. La app entra con tu cuenta de Google y guarda todo
+en tu Drive: la misma hoja "Clientes Pixel Arte" y la misma carpeta
+"Contratos Pixel Arte" (las encuentra sola).
+
+1) SUBIR LA APP (una vez) - GitHub Pages, gratis
+   - En github.com crea una cuenta y luego "New repository" (ej. contratos, Public).
+   - "Add file" > "Upload files" > sube TODOS estos archivos (menos este LEEME) > "Commit changes".
+   - Settings > Pages > Branch: main, carpeta / (root) > Save. Espera 1-2 minutos.
+   - Tu app queda en: https://TUUSUARIO.github.io/contratos/
+
+2) CLIENT ID DE GOOGLE (una vez) - console.cloud.google.com con tu cuenta
+   - Crea un proyecto (ej. Pixel Arte).
+   - APIs y servicios > Biblioteca: activa "Google Sheets API" y "Google Drive API".
+   - Google Auth Platform > Comenzar: nombre de la app y tu correo. Publico: Externo.
+   - Publico (Audience) > Usuarios de prueba: agrega tu correo.
+   - Clientes > Crear cliente > Aplicacion web.
+     Origenes autorizados de JavaScript: https://TUUSUARIO.github.io   (sin /contratos al final)
+   - Crear y copia el "ID de cliente" (termina en .apps.googleusercontent.com).
+
+3) ENTRAR
+   - Abre tu link en Chrome, pega el Client ID y toca "Iniciar sesion con Google".
+   - Google avisara que no verifico la app: es tu propia app, toca Continuar.
+   - Marca la casilla de Google Drive para que pueda guardar.
+   - Para tenerla como app: menu de Chrome > "Instalar app" o "Agregar a pantalla principal".
+
+4) ACTUALIZAR (lo unico que haras despues)
+   - En tu repositorio de GitHub: "Add file" > "Upload files" > sube el index.html nuevo > Commit.
+   - En 1-2 minutos el celular ya abre la version nueva.
+
+NOTAS
+   - El APK viejo (WebView) no sirve para entrar con Google: Google lo bloquea.
+     Usa la app instalada desde Chrome. Si de verdad necesitas APK, en pwabuilder.com
+     pones tu link y te genera uno que siempre carga el index.html mas nuevo.
+   - Si Google te pide el permiso otra vez seguido, en Google Auth Platform > Publico
+     toca "Publicar app".
+   - Otra persona puede entrar con su cuenta si la agregas como usuario de prueba.
+     Para que vea TUS contratos, comparte la hoja y la carpeta con ella y que pegue
+     el link de la hoja en Ajustes.
