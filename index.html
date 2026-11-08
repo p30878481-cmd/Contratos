@@ -353,7 +353,7 @@ if(!r)$("fecha").value=hoy();setLock(!!r);$("recibe").disabled=!!(r&&r.firma2&&r
 // ================= Inicio de sesión con Google =================
 const LS={get:k=>{try{return localStorage.getItem(k)||""}catch(e){return""}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
 // Opcional: pega aquí tu Client ID (termina en .apps.googleusercontent.com) para no tener que escribirlo en la app.
-const CLIENT_ID_FIJO="";
+const CLIENT_ID_FIJO="233542961005-l50b1gslag5s5j6aelkp6reic7iu49dg.apps.googleusercontent.com";
 const GX_DRIVE="https://www.googleapis.com/auth/drive",GX_SCOPES=GX_DRIVE+" https://www.googleapis.com/auth/userinfo.email";
 const gxCid=()=>(CLIENT_ID_FIJO||LS.get("pa_cid")).trim();
 let gxTk=(()=>{try{return JSON.parse(LS.get("pa_tok")||"null")||{}}catch(e){return{}}})(),gxPend=null;
@@ -994,7 +994,7 @@ if(!curTok())location.hash="vi";
 fill(null);
 if(cacheLoad()){draw();drawTable();drawGroups();msg("Actualizando…")}
 bbCount();
-$("cfgcid").value=gxCid();gxDatosCuenta();
+$("cfgcid").value=gxCid();if(CLIENT_ID_FIJO){$("cfgcid").style.display="none";$("cfgcid").previousElementSibling.style.display="none"}gxDatosCuenta();
 if(gxSesion()){$("gxlg").style.display="none";load(true)}else gxMostrarLogin();
 // Para que funcione como app instalada (y sin internet abra la última versión).
 if("serviceWorker" in navigator&&location.protocol=="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
