@@ -352,6 +352,20 @@ sg={f1:r&&r.firma1||"",f2:r&&r.firma2||""};sgAt={f1:"",f2:(r&&r.firma2At)||""};$
 if(!r)$("fecha").value=hoy();setLock(!!r);$("recibe").disabled=!!(r&&r.firma2&&r.recibe);updRestas();if(S.ov)swap("vi");else go("vi");scrollTo(0,0)}
 // ================= Inicio de sesión con Google =================
 const LS={get:k=>{try{return localStorage.getItem(k)||""}catch(e){return""}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+// Si la app corre dentro del APK de Pixel Arte, Android hace el inicio de sesión, guarda archivos, abre links e imprime.
+const AND=(()=>{try{return window.PixelArteAndroid||null}catch(e){return null}})();
+if(AND){window.open=function(u){try{AND.abrir(String(u||""))}catch(e){}return{closed:false,close(){},focus(){}}};window.print=function(){try{AND.imprimir()}catch(e){msg("Este dispositivo no pudo abrir la impresión.")}}}
+// Versión de la app: se calcula sola a partir del código, así que no hay que cambiar nada al actualizar.
+const GX_VER=(()=>{let h=2166136261;const s=[...document.scripts].map(x=>x.textContent||"").join("");for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)})();
+function gxAviso(t){try{if(AND&&typeof AND.aviso=="function"){AND.aviso(t);return}}catch(e){}msg(t)}
+const gxNat={};let gxNatN=0;
+window.gxNativo=(id,t,e)=>{const p=gxNat[id];if(!p)return;delete gxNat[id];if(t)p.ok(t);else p.no(new Error(gxNatErr(e)))};
+function gxNatErr(e){e=String(e||"");
+if(/^cancel|^16:|12501/i.test(e))return"Se cerró la ventana de Google antes de terminar.";
+if(/^10:|DEVELOPER_ERROR/i.test(e))return"Google no reconoce esta app: falta el cliente Android en Google Cloud o la huella SHA-1 no coincide (paso 3 de la guía del APK).";
+if(/^7:|NETWORK/i.test(e))return"Sin conexión a internet.";
+return"Google no dejó entrar ("+e+")."}
+function gxGuardarNativo(name,blob){const fr=new FileReader();fr.onload=()=>{try{AND.guardarArchivo(name,blob.type||"application/octet-stream",String(fr.result).split(",")[1]||"");msg("Guardado en Descargas › Pixel Arte ✔")}catch(e){msg("No se pudo guardar el archivo.")}};fr.onerror=()=>msg("No se pudo guardar el archivo.");fr.readAsDataURL(blob)}
 // Opcional: pega aquí tu Client ID (termina en .apps.googleusercontent.com) para no tener que escribirlo en la app.
 const CLIENT_ID_FIJO="233542961005-l50b1gslag5s5j6aelkp6reic7iu49dg.apps.googleusercontent.com";
 const GX_DRIVE="https://www.googleapis.com/auth/drive",GX_SCOPES=GX_DRIVE+" https://www.googleapis.com/auth/userinfo.email";
@@ -359,9 +373,12 @@ const gxCid=()=>(CLIENT_ID_FIJO||LS.get("pa_cid")).trim();
 let gxTk=(()=>{try{return JSON.parse(LS.get("pa_tok")||"null")||{}}catch(e){return{}}})(),gxPend=null;
 const gxSesion=()=>!!(gxTk.t&&gxTk.exp>Date.now());
 const gxGuardarTk=()=>LS.set("pa_tok",JSON.stringify(gxTk));
-function gxTokenMalo(){gxTk.exp=0;gxGuardarTk()}
+function gxTokenMalo(){gxTk.malo=gxTk.t;gxTk.exp=0;gxGuardarTk()}
 // Abre la ventanita de Google para elegir la cuenta y dar permiso (una hora por vez; luego se renueva sola o con un toque).
-function gxPedir(prompt){if(gxPend)return gxPend;gxPend=new Promise((ok,no)=>{
+function gxPedir(prompt){if(gxPend)return gxPend;
+if(AND){gxPend=new Promise((ok,no)=>{const id="t"+(++gxNatN);gxNat[id]={ok,no};try{AND.pedirToken(id,gxTk.malo||"")}catch(e){delete gxNat[id];no(new Error("No se pudo abrir el inicio de sesión de Google."))}})
+.then(t=>{gxTk={t,exp:Date.now()+45*60000,mail:gxTk.mail||""};gxGuardarTk();return t}).finally(()=>{gxPend=null});return gxPend}
+gxPend=new Promise((ok,no)=>{
 const g=window.google&&google.accounts&&google.accounts.oauth2;if(!g)return no(new Error("No cargó el inicio de sesión de Google. Revisa tu internet y vuelve a abrir la app."));
 const cid=gxCid();if(!cid)return no(new Error("Falta el Client ID de Google (paso 2 de la guía)."));
 let c;try{c=g.initTokenClient({client_id:cid,scope:GX_SCOPES,
@@ -376,13 +393,13 @@ async function gxToken(){if(gxSesion())return gxTk.t;try{return await gxPedir(""
 async function gxCorreo(){try{const j=await gxFetch("https://www.googleapis.com/oauth2/v3/userinfo");if(!j.email)return;gxTk.mail=j.email;gxGuardarTk();
 const antes=LS.get("pa_acct");if(antes!==j.email){if(antes){LS.set("pa_ss","");LS.set("pa_dir","");gxOlvidar()}LS.set("pa_acct",j.email)}}catch(e){}}
 function gxOlvidar(){try{localStorage.removeItem("pa_cache")}catch(e){}GB={m:null,f:"",fg:""};recs=[];rows=[];GM=[];SU="";lastLoad=0;draw();drawTable();drawGroups()}
-function gxMostrarLogin(t){$("gxcid").style.display=gxCid()?"none":"block";$("gxmsg").textContent=t||"";$("gxquien").textContent=gxTk.mail?"Cuenta: "+gxTk.mail:"";$("gxlg").style.display="flex"}
+function gxMostrarLogin(t){$("gxcid").style.display=(AND||gxCid())?"none":"block";$("gxmsg").textContent=t||"";$("gxquien").textContent=gxTk.mail?"Cuenta: "+gxTk.mail:"";$("gxlg").style.display="flex"}
 function gxDatosCuenta(){$("cfgacct").textContent=gxTk.mail||(gxSesion()?"Conectada":"Sin sesión");
 $("cfgss").innerHTML=SU?'<a href="#" id="cfgssa">📄 Abrir «Clientes Pixel Arte» en Google Sheets</a>':'<span style="color:var(--mu)">Se busca sola en tu Drive («Clientes Pixel Arte»); si no existe, se crea.</span>';
 const a=$("cfgssa");if(a)a.onclick=e=>{e.preventDefault();openExt(SU)}}
 $("gxlogo").src=LOGO_UI;
 $("gxbtn").onclick=async()=>{const ci=$("gxcidin").value.trim();if(ci)LS.set("pa_cid",ci);
-if(!gxCid()){$("gxmsg").textContent="Primero pega tu Client ID de Google (paso 2 de la guía).";$("gxcidin").focus();return}
+if(!AND&&!gxCid()){$("gxmsg").textContent="Primero pega tu Client ID de Google (paso 2 de la guía).";$("gxcidin").focus();return}
 $("gxmsg").textContent="Abriendo Google…";$("gxbtn").disabled=true;
 try{await gxPedir(gxTk.mail?"":"select_account");await gxCorreo();$("gxlg").style.display="none";$("gxmsg").textContent="";$("cfgcid").value=gxCid();gxDatosCuenta();msg("");load(true)}
 catch(e){$("gxmsg").textContent=err(e)}finally{$("gxbtn").disabled=false}};
@@ -390,7 +407,7 @@ $("cfgusr").value=LS.get("pa_usr");
 $("cfgsave").onclick=()=>{LS.set("pa_usr",$("cfgusr").value.trim());const c=$("cfgcid").value.trim();if(c)LS.set("pa_cid",c);
 const s=$("cfgssin").value.trim();if(s){const mm=/\/d\/([-\w]{20,})/.exec(s)||/^([-\w]{25,})$/.exec(s);if(!mm){msg("Ese link no parece de una hoja de Google Sheets.");return}LS.set("pa_ss",mm[1]);$("cfgssin").value="";gxOlvidar()}
 msg("Ajustes guardados ✔");if(gxSesion())load(true)};
-$("cfgout").onclick=()=>{const t=gxTk.t;try{if(t&&window.google&&google.accounts)google.accounts.oauth2.revoke(t,()=>{})}catch(e){}
+$("cfgout").onclick=()=>{const t=gxTk.t;try{if(AND)AND.cerrarSesion(gxTk.mail||"",t||"");else if(t&&window.google&&google.accounts)google.accounts.oauth2.revoke(t,()=>{})}catch(e){}
 gxTk={};LS.set("pa_tok","");gxOlvidar();gxDatosCuenta();gxMostrarLogin("Sesión cerrada. Puedes entrar con la misma cuenta o con otra.")};
 const WV=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||!!(navigator.userAgentData&&navigator.userAgentData.mobile)||((navigator.maxTouchPoints||0)>1&&typeof screen!="undefined"&&Math.min(screen.width,screen.height)<900);
 $("dbg").textContent="Detectado: "+(WV?"celular o tableta":"computadora")+" · toques: "+(navigator.maxTouchPoints||0)+(typeof screen!="undefined"?" · pantalla "+screen.width+"×"+screen.height:"");
@@ -983,19 +1000,21 @@ if(k=="ver"){verContrato(r);return}
 if(k=="edi"){fill(r);return}
 closeOv();
 if(k=="lnk")openExt(r.pdf);else if(k=="des")dl(fname(r),pdf(r));else if(k=="imp")setTimeout(()=>imprimir(r),300);else if(k=="tel")llamar(r.celular);else if(k=="tel2")llamar(r.telref);else if(k=="wsp")wsp(r)});
-function dl(name,blob){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000)}
+function dl(name,blob){if(AND){gxGuardarNativo(name,blob);return}const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000)}
 $("list").addEventListener("contextmenu",e=>e.preventDefault());
 // ================= Botones del formulario y arranque =================
 $("bsave").onclick=save;$("bprint").onclick=printForm;$("bprt").onclick=printForm;$("bnew").onclick=()=>{fill(null);msg("")};
 $("bxls").onclick=()=>{if(rows.length<2){msg("No hay clientes guardados.");return}
 const a=rows.map(x=>visCols(x));const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(a);ws["!cols"]=a[0].map(k=>({wch:Math.max(12,String(k).length+2)}));ws["!autofilter"]={ref:ws["!ref"]};
-XLSX.utils.book_append_sheet(wb,ws,"Clientes");XLSX.writeFile(wb,"Clientes_PixelArte.xlsx")};
+XLSX.utils.book_append_sheet(wb,ws,"Clientes");if(AND){try{AND.guardarArchivo("Clientes_PixelArte.xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",XLSX.write(wb,{bookType:"xlsx",type:"base64"}));msg("Guardado en Descargas › Pixel Arte ✔")}catch(e){msg("No se pudo guardar el Excel.")}}else XLSX.writeFile(wb,"Clientes_PixelArte.xlsx")};
 if(!curTok())location.hash="vi";
 fill(null);
 if(cacheLoad()){draw();drawTable();drawGroups();msg("Actualizando…")}
 bbCount();
 $("cfgcid").value=gxCid();if(CLIENT_ID_FIJO){$("cfgcid").style.display="none";$("cfgcid").previousElementSibling.style.display="none"}gxDatosCuenta();
-if(gxSesion()){$("gxlg").style.display="none";load(true)}else gxMostrarLogin();
+if(gxSesion()){$("gxlg").style.display="none";load(true)}else if(AND&&gxTk.mail){gxMostrarLogin();$("gxbtn").click()}else gxMostrarLogin();
 // Para que funcione como app instalada (y sin internet abra la última versión).
-if("serviceWorker" in navigator&&location.protocol=="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
+{const va=LS.get("pa_ver");if(va&&va!==GX_VER)setTimeout(()=>gxAviso("✨ La app se actualizó a la versión más reciente."),1200);LS.set("pa_ver",GX_VER);
+$("dbg").textContent+=" · Versión "+GX_VER+(AND?(/github\.io$/.test(location.hostname)?" (desde GitHub)":" (copia interna)"):"")}
+if(!AND&&"serviceWorker" in navigator&&location.protocol=="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script></body></html>
