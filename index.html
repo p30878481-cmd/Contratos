@@ -471,6 +471,7 @@ const gxTxt=(sid,r,c,nr,nc)=>({repeatCell:{range:gxR(sid,r,c,nr,nc),cell:{userEn
 const gxCelda=(t,r,c,v)=>({range:gxA1(t,gxCol(c)+r),values:[[v]]});
 const gxBorrarFila=(sid,f)=>({deleteDimension:{range:{sheetId:sid,dimension:"ROWS",startIndex:f-1,endIndex:f}}});
 const gxOcultar=(sid,f)=>({updateDimensionProperties:{range:{sheetId:sid,dimension:"ROWS",startIndex:f-1,endIndex:f},properties:{hiddenByUser:true},fields:"hiddenByUser"}});
+const gxMostrar=(sid,f,hasta)=>({updateDimensionProperties:{range:{sheetId:sid,dimension:"ROWS",startIndex:f-1,endIndex:hasta||f},properties:{hiddenByUser:false},fields:"hiddenByUser"}});
 const gxPad=(rows,w)=>{let W=w||0;rows.forEach(x=>{if(x.length>W)W=x.length});return rows.map(x=>{const y=x.slice();while(y.length<W)y.push("");return y})};
 const gxYmd=v=>{const d=new Date(Math.round((Math.floor(v+1e-7)-25569)*864e5)),p=n=>String(n).padStart(2,"0");return d.getUTCFullYear()+"-"+p(d.getUTCMonth()+1)+"-"+p(d.getUTCDate())};
 const gxFechas=(row,cols)=>{cols.forEach(j=>{const v=row[j];if(typeof v=="number"&&v>20000&&v<80000)row[j]=gxYmd(v)});return row};
@@ -502,9 +503,14 @@ async function gxGetMuchos(id,ranges){const out=[];for(let i=0;i<ranges.length;i
 // RAW = se guarda tal cual (texto, números). USER_ENTERED = como si lo escribieras tú (fórmulas y fechas).
 function gxPut(id,data,user){data=data.filter(Boolean);if(!data.length)return Promise.resolve({});return gxFetch(GG.SHT+"/"+id+"/values:batchUpdate",{method:"POST",body:JSON.stringify({valueInputOption:user?"USER_ENTERED":"RAW",data})})}
 function gxBatch(id,requests){requests=requests.filter(Boolean);if(!requests.length)return Promise.resolve({});return gxFetch(GG.SHT+"/"+id+":batchUpdate",{method:"POST",body:JSON.stringify({requests})})}
-// Agrega una fila al final en UNA sola operación de Google (dos teléfonos a la vez nunca caen en la misma fila). Devuelve el número de fila.
-async function gxAgregar(id,titulo,fila){const j=await gxFetch(GG.SHT+"/"+id+"/values/"+encodeURIComponent(gxA1(titulo,"A1"))+":append?valueInputOption=USER_ENTERED&insertDataOption=OVERWRITE&includeValuesInResponse=false",{method:"POST",body:JSON.stringify({values:[fila.map(v=>v==null?"":gxUE(v))]})});
-const n=gxFilaDe(j.updates&&j.updates.updatedRange);if(!n)throw new Error("Google no confirmó en qué fila se guardó. Intenta de nuevo.");return n}
+// Agrega una fila DESPUÉS de la última fila con datos de la pestaña. Las filas ocultas (cosas eliminadas) también cuentan,
+// así nunca se escribe encima de nada. Es UNA sola operación de Google: dos teléfonos a la vez nunca caen en la misma fila.
+// (Antes se usaba "values.append", que busca dónde termina la tabla y con filas ocultas puede caer encima de la última fila.)
+const gxValor=v=>v==null||v===""?{}:typeof v=="number"?{userEnteredValue:{numberValue:v}}:typeof v=="boolean"?{userEnteredValue:{boolValue:v}}:String(v)[0]==="="?{userEnteredValue:{formulaValue:String(v)}}:{userEnteredValue:{stringValue:String(v)}};
+async function gxFilaDeClave(id,titulo,col,clave){const c=gxCol(col),v=(await gxGet(id,[gxA1(titulo,c+"1:"+c)]))[0];for(let i=v.length-1;i>0;i--)if(String((v[i]||[])[0]==null?"":v[i][0]).trim()===clave)return i+1;return 0}
+// Devuelve el número de fila buscando la clave única que se acaba de escribir en la columna col.
+async function gxAgregar(id,hoja,fila,col,clave){await gxBatch(id,[{appendCells:{sheetId:hoja.sheetId,rows:[{values:fila.map(gxValor)}],fields:"userEnteredValue"}}]);
+if(!col)return 0;const n=await gxFilaDeClave(id,hoja.title,col,clave);if(!n)throw new Error("Google no confirmó en qué fila se guardó. Intenta de nuevo.");return n}
 const gxVersion=id=>gxFetch(GG.DRV+"/files/"+id+"?fields=version").then(j=>String(j.version||""));
 // ----- hoja principal, carpeta de PDFs -----
 const GX_META="spreadsheetId,spreadsheetUrl,sheets.properties(sheetId,title,index,gridProperties(rowCount,columnCount))";
@@ -655,8 +661,9 @@ async function gxReservar(m,ix,body){const t=m.h.title,id=String(body.id||"");if
 let f=gxSigFolio(ix.folio.slice(1));
 const json=()=>JSON.stringify({_id:id,_reservado:1,folio:f.folio,serie:f.serie,at:Date.now()});
 const fila=new Array(GG.NC).fill("");fila[0]=f.serie+"-"+f.folio;fila[1]=new Date().toISOString().slice(0,10);fila[2]=GG.RES;fila[GG.JC-1]=json();fila[GG.ID-1]=id;fila[GG.CHG-1]=gxStamp();
-const n=await gxAgregar(m.id,t,fila);
+await gxAgregar(m.id,m.h,fila);let n=0;
 for(let k=0;k<8;k++){const [a,ids]=await gxGet(m.id,[gxA1(t,"A1:A"),gxA1(t,"AI1:AI")]);const fol=a.map(x=>String((x||[])[0]==null?"":x[0])),mio=f.serie+"-"+f.folio;
+if(!n){for(let i=ids.length-1;i>0;i--)if(String(((ids[i]||[])[0])||"")===id){n=i+1;break}if(!n)throw new Error("Google no confirmó en qué fila se apartó el folio. Intenta de nuevo.")}
 const choca=fol.some((x,i)=>i>0&&i<n-1&&x===mio&&String(((ids[i]||[])[0])||"")!==id);if(!choca)break;
 f=gxSigFolio(fol.slice(1).filter((x,i)=>i+1!==n-1));
 await gxPut(m.id,[gxCelda(t,n,1,f.serie+"-"+f.folio),gxCelda(t,n,GG.JC,json()),gxCelda(t,n,GG.CHG,gxStamp())])}
@@ -674,14 +681,16 @@ const fila=(body.row||[]).slice(0,30).map(v=>v==null?"":v);while(fila.length<30)
 fila[24]=link;
 const ubi=rec.ubicacion!==undefined?String(rec.ubicacion||""):null,grp=rec.grupo!==undefined?String(rec.grupo||""):null,tpl=rec.tipoplaca!==undefined?String(rec.tipoplaca||""):null;
 if(n>0){rec._row=n;fila[20]="";fila[29]="";fila.push(JSON.stringify(rec));
-const req=[];GG.TEXTO.concat([GG.UBI,GG.GRP]).forEach(c=>req.push(gxTxt(sid,n,c)));req.push(...gxPintar(sid,n,rec.estado||"Recibido"));
+const req=[gxMostrar(sid,n)];GG.TEXTO.concat([GG.UBI,GG.GRP]).forEach(c=>req.push(gxTxt(sid,n,c)));req.push(...gxPintar(sid,n,rec.estado||"Recibido"));
 const raw=[{range:gxA1(t,"A"+n+":"+gxCol(GG.JC)+n),values:[fila]},{range:gxA1(t,gxCol(GG.ID)+n+":"+gxCol(GG.CHG)+n),values:[[String(rec._id||""),st]]}];
 if(ubi!==null)raw.push(gxCelda(t,n,GG.UBI,ubi));if(grp!==null)raw.push(gxCelda(t,n,GG.GRP,grp));if(tpl!==null)raw.push(gxCelda(t,n,GG.TPL,tpl));
 const ue=[gxCelda(t,n,21,GG.F_SALDO),gxCelda(t,n,30,GG.F_RESTA)];[2,22].forEach(c=>{const v=fila[c-1];if(typeof v=="string"&&/^\d{4}-\d\d-\d\d$/.test(v))ue.push(gxCelda(t,n,c,v))});
 await gxBatch(m.id,req);await gxPut(m.id,raw);await gxPut(m.id,ue,true)}
 else{// Contrato nuevo sin folio apartado (versiones viejas de la app): se agrega al final en una sola operación.
 rec._row=0;fila[20]=GG.F_SALDO;fila[29]=GG.F_RESTA;fila.push(JSON.stringify(rec),ubi||"",grp||"",tpl||"",String(rec._id||""),st);
-n=await gxAgregar(m.id,t,fila);const req=[];GG.TEXTO.concat([GG.UBI,GG.GRP]).forEach(c=>req.push(gxTxt(sid,n,c)));req.push(...gxPintar(sid,n,rec.estado||"Recibido"));await gxBatch(m.id,req)}
+if(!rec._id)rec._id="id"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);fila[GG.JC-1]=JSON.stringify(rec);fila[GG.ID-1]=String(rec._id);
+n=await gxAgregar(m.id,m.h,fila,GG.ID,String(rec._id));const req=[gxMostrar(sid,n)];GG.TEXTO.concat([GG.UBI,GG.GRP]).forEach(c=>req.push(gxTxt(sid,n,c)));req.push(...gxPintar(sid,n,rec.estado||"Recibido"));await gxBatch(m.id,req);
+const ue=[];[2,22].forEach(c=>{const v=fila[c-1];if(typeof v=="string"&&/^\d{4}-\d\d-\d\d$/.test(v))ue.push(gxCelda(t,n,c,v))});if(ue.length)await gxPut(m.id,ue,true)}
 if(body.oldPdf&&body.oldPdf!==link)await gxPapelera(body.oldPdf);
 return{ok:true,row:n,link,stamp:st}}
 // Borrar sin recorrer filas: se marca "(eliminado)", se vacían sus datos y se oculta la fila.
@@ -733,12 +742,12 @@ async function gxGruposOp(m,ix,body){const g=await gxHojaGrupos(m),nombre=String
 if(!nombre)return{error:"Falta el nombre del grupo."};
 let gr=(await gxGet(m.id,[gxA1(g.title,"A1:G")]))[0];if(!gr.length)gr=[[]];gr=gxPad(gr,7);
 const fila=nm=>{for(let i=1;i<gr.length;i++)if(String(gr[i][0]).trim()===nm)return i+1;return 0};
-const asegurar=async nm=>{let f=fila(nm);if(f)return f;f=await gxAgregar(m.id,g.title,[nm,gxAhora()]);
+const asegurar=async nm=>{let f=fila(nm);if(f)return f;f=await gxAgregar(m.id,g,[nm,gxAhora()],1,nm);
 while(gr.length<f)gr.push(["","","","","","",""]);gr[f-1]=[nm,"","","","","",""];return f};
 const tirar=async id=>{if(id){try{await gxFetch(GG.DRV+"/files/"+id+"?fields=id",{method:"PATCH",body:JSON.stringify({trashed:true})})}catch(e){}}};
 const quitarFila=async f=>{await gxPut(m.id,[gxCelda(g.title,f,1,GG.DEL+" "+nombre)]);await gxBatch(m.id,[gxOcultar(g.sheetId,f)])};
 const op=body.op;
-if(op==="crear"){if(fila(nombre))return{error:'Ya existe un grupo llamado "'+nombre+'".'};const f=await asegurar(nombre);let url="";try{url=await gxReporte(m,g,gr,f,nombre,body.hojas)}catch(e){}return{ok:true,url}}
+if(op==="crear"){if(fila(nombre))return{error:'Ya existe un grupo llamado "'+nombre+'".'};const f=await asegurar(nombre);await gxBatch(m.id,[gxMostrar(g.sheetId,f)]);let url="";try{url=await gxReporte(m,g,gr,f,nombre,body.hojas)}catch(e){}return{ok:true,url}}
 if(op==="reporte"){const f=await asegurar(nombre);return{ok:true,url:await gxReporte(m,g,gr,f,nombre,body.hojas)}}
 if(op==="ubicar"){const ubi=String(body.ubicacion||"").trim().slice(0,80),f=await asegurar(nombre);await gxPut(m.id,[gxCelda(g.title,f,3,ubi)]);return{ok:true,n:await gxPorGrupo(m,ix,nombre,"ubicacion",GG.UBI,ubi)}}
 if(op==="renombrar"){const nuevo=String(body.nuevo||"").trim().slice(0,60);if(!nuevo)return{error:"Falta el nombre nuevo."};
@@ -759,15 +768,21 @@ try{await gxBatch(m.id,[{addSheet:{properties:{sheetId:sid,title:GG.UBIS,gridPro
 const base=(body.base||[]).map(x=>String(x||"").trim()).filter(Boolean);await gxPut(m.id,[{range:gxA1(GG.UBIS,"A1"),values:[GG.ENC_UBIS].concat(base.map(x=>[x,""]))}])}catch(e){if(e.status!=400)throw e}
 const nm=await gxMeta(true);Object.assign(m,nm);if(!m.u)throw new Error("No se pudo crear la pestaña de ubicaciones.")}
 const t=m.u.title,v=gxPad((await gxGet(m.id,[gxA1(t,"A1:B")]))[0],2),activa=nm=>{for(let i=1;i<v.length;i++)if(String(v[i][0]).trim()===nm&&String(v[i][1])!==GG.UBI_DEL)return i+1;return 0};
-if(body.op==="agregar"){if(activa(nombre))return{error:"Ya existe la ubicación «"+nombre+"»."};await gxAgregar(m.id,t,[nombre,""]);return{ok:true}}
+const verActivas=()=>{const q=[];for(let i=1;i<v.length;i++)if(String(v[i][0]==null?"":v[i][0]).trim()&&String(v[i][1])!==GG.UBI_DEL)q.push(gxMostrar(m.u.sheetId,i+1));return gxBatch(m.id,q)};
+if(body.op==="agregar"){if(activa(nombre))return{error:"Ya existe la ubicación «"+nombre+"»."};await gxAgregar(m.id,m.u,[nombre]);await verActivas();return{ok:true}}
 if(body.op==="quitar"){const f=activa(nombre);if(!f)return{ok:true};await gxPut(m.id,[gxCelda(t,f,2,GG.UBI_DEL)]);await gxBatch(m.id,[gxOcultar(m.u.sheetId,f)]);return{ok:true}}
 return{error:"Operación desconocida."}}
 // ----- limpieza: borra de verdad las filas eliminadas y los folios apartados que no se usaron (hacerlo cuando nadie esté guardando) -----
 async function gxLimpiar(m,ix){const viejo=Date.now()-3600000,res=[];for(let i=1;i<ix.n;i++)if(ix.nombre[i]===GG.RES)res.push(i+1);
 const js=await gxJson(m,res),del=[];for(let i=1;i<ix.n;i++){const f=i+1;if(gxBorrada(ix,i))del.push(f);else if(ix.nombre[i]===GG.RES){const r=js[f];if(!r||!r._reservado||(r.at||0)<viejo)del.push(f)}}
-const desc=a=>a.sort((x,y)=>y-x);if(del.length)await gxBatch(m.id,desc(del).map(f=>gxBorrarFila(m.h.sheetId,f)));
-let ng=0;if(m.g){const gr=(await gxGet(m.id,[gxA1(m.g.title,"A1:A")]))[0],dg=[];gr.forEach((x,i)=>{if(i&&String((x||[])[0]||"").indexOf(GG.DEL)===0)dg.push(i+1)});if(dg.length)await gxBatch(m.id,desc(dg).map(f=>gxBorrarFila(m.g.sheetId,f)));ng=dg.length}
-if(m.u){const ub=(await gxGet(m.id,[gxA1(m.u.title,"A1:B")]))[0],du=[];ub.forEach((x,i)=>{if(i&&String((x||[])[1]||"")===GG.UBI_DEL)du.push(i+1)});if(du.length)await gxBatch(m.id,desc(du).map(f=>gxBorrarFila(m.u.sheetId,f)))}
+const desc=a=>a.sort((x,y)=>y-x);
+// Lo que se queda vuelve a estar visible; luego se borran de verdad las filas eliminadas (de abajo hacia arriba).
+if(ix.n>1)await gxBatch(m.id,[gxMostrar(m.h.sheetId,2,ix.n)]);
+if(del.length)await gxBatch(m.id,desc(del).map(f=>gxBorrarFila(m.h.sheetId,f)));
+let ng=0;if(m.g){const gr=(await gxGet(m.id,[gxA1(m.g.title,"A1:A")]))[0],dg=[];gr.forEach((x,i)=>{if(i&&String((x||[])[0]||"").indexOf(GG.DEL)===0)dg.push(i+1)});
+if(gr.length>1)await gxBatch(m.id,[gxMostrar(m.g.sheetId,2,gr.length)]);if(dg.length)await gxBatch(m.id,desc(dg).map(f=>gxBorrarFila(m.g.sheetId,f)));ng=dg.length}
+if(m.u){const ub=(await gxGet(m.id,[gxA1(m.u.title,"A1:B")]))[0],du=[];ub.forEach((x,i)=>{if(i&&String((x||[])[1]||"")===GG.UBI_DEL)du.push(i+1)});
+if(ub.length>1)await gxBatch(m.id,[gxMostrar(m.u.sheetId,2,ub.length)]);if(du.length)await gxBatch(m.id,desc(du).map(f=>gxBorrarFila(m.u.sheetId,f)))}
 GB.c=null;return{ok:true,n:del.length,g:ng}}
 // Crea o actualiza el Sheet del grupo con las pestañas que arma la app. Todo el contenido se escribe en UNA sola operación de Google
 // (si dos teléfonos lo actualizan a la vez, uno espera al otro y el Sheet nunca queda revuelto).
