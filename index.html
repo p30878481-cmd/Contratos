@@ -602,10 +602,10 @@ const intenta=async f=>{try{return await f()}catch(e){if(e.status!=400&&e.status
 if(p.solo==="folios")return intenta(async()=>({folios:(await gxGet(m.id,[gxA1(m.h.title,"A2:A")]))[0].map(x=>x[0]===undefined?"":x[0])}));
 let ver=await intenta(()=>gxVersion(m.id));const c=gxCacheIni(m),completo=p.completo==="1";
 // 1) La hoja no cambió desde la última vez: no se descarga nada.
-if(!completo&&c&&c.ver===ver)return c;
+const ahora=Date.now();if(!completo&&c&&c.ver===ver&&ahora>gxNoVer()&&ahora-(c.chk||0)<GX_FRESCO)return c;
 const extras=()=>{const r=[];if(m.g)r.push(gxA1(m.g.title,"A1:G"));if(m.u)r.push(gxA1(m.u.title,"A1:B"));return r};
 const fin=(values,ex)=>{let k=0;const gr=m.g?ex[k++]:[],ub=m.u?ex[k++]:[];
-GB.c={values,sheetUrl:m.url,grupos:gxLeerGrupos(gr.map(x=>gxFechas(x.slice(),[1,6]))),ubicaciones:gxLeerUbis(ub,!!m.u),ver,ss:m.id,at:(c&&!completo&&values===c.values)?c.at:Date.now()};return GB.c};
+GB.c={values,sheetUrl:m.url,grupos:gxLeerGrupos(gr.map(x=>gxFechas(x.slice(),[1,6]))),ubicaciones:gxLeerUbis(ub,!!m.u),ver,ss:m.id,chk:Date.now(),at:(c&&!completo&&values===c.values)?c.at:Date.now()};return GB.c};
 // 2) Cambió poco: solo se bajan las filas cuya marca de cambio es distinta.
 if(!completo&&c&&Date.now()-(c.at||0)<1800000&&m.h.gridProperties.columnCount>=GG.NC&&(c.values[0]||[])[GG.CHG-1]===GG.ENC[GG.CHG-1]){
 const res=await intenta(()=>gxGet(m.id,[gxA1(m.h.title,gxCol(GG.ID)+"1:"+gxCol(GG.CHG))].concat(extras())));const idx=res[0],ex=res.slice(1);
@@ -630,7 +630,10 @@ function gxLeerGrupos(rows){const S=v=>v==null?"":String(v),vistos=new Set();
 return rows.slice(1).filter(x=>{const n=S(x[0]).trim();if(!n||n.indexOf(GG.DEL)===0||vistos.has(n))return false;vistos.add(n);return true}).map(x=>({nombre:S(x[0]).trim(),creado:S(x[1]),ubicacion:S(x[2]),notas:S(x[3]),link:S(x[4]),actualizado:S(x[6])}))}
 function gxLeerUbis(rows,hay){if(!hay)return null;const vistos=new Set(),out=[];rows.slice(1).forEach(x=>{const n=String(x[0]==null?"":x[0]).trim();if(n&&String(x[1]||"")!==GG.UBI_DEL&&!vistos.has(n)){vistos.add(n);out.push(n)}});return out}
 // ----- guardar y cambiar (lo que antes hacía doPost) -----
-async function gxPost(body){const a=await gxAsegurar(),m=a.m,ix=a.ix;
+// Google Drive tarda en reportar que la hoja cambió: después de escribir, durante 3 minutos se lee directo de la hoja.
+const GX_FRESCO=180000,gxNoVer=()=>Math.max(GB.noVer||0,+LS.get("pa_nov")||0),gxEscribi=()=>{GB.noVer=Date.now()+GX_FRESCO;LS.set("pa_nov",String(GB.noVer))};
+async function gxPost(body){gxEscribi();try{return await gxPostX(body)}finally{gxEscribi()}}
+async function gxPostX(body){const a=await gxAsegurar(),m=a.m,ix=a.ix;
 switch(body.action){
 case"reservar":return gxReservar(m,ix,body);
 case"delete":return gxBorrar(m,ix,body);
@@ -814,9 +817,9 @@ const fm=/^([A-Za-z])-(\d+)$/.exec(x[0]||"");if(!r)r={_id:"row"+(i+2),folio:fm?f
 r._row=i+2;r._stamp=x[35]==null?"":String(x[35]);r.pdf=x[24]||r.pdf||"";r.ubicacion=x.length>JI+1?(x[JI+1]||""):(r.ubicacion||"");r.grupo=x.length>JI+2?(x[JI+2]||""):(r.grupo||"");
 hx[r._id]=norm([folioFull(r),r.folio,r.nombre,r.escuela,r.carrera,r.generacion,r.paquete,estadoOf(r),(r.articulos||[]).join(" "),r.celular,r.telref,r.correo,r.numtexto,r.atendio,r.editor,(()=>{const p=payInfo(r);return p?(p.rest>0?"debe adeudo":"pagado liquidado"):""})(),ubiAct(r),ubiNone(r)?"sin ubicar":"",r.grupo].join(" "));
 return r}).filter(r=>r&&(r.nombre||r.folio))}
-function cacheSave(v){try{const s=JSON.stringify({v:{values:v.values,sheetUrl:v.sheetUrl,grupos:v.grupos,ubicaciones:v.ubicaciones||null,ver:v.ver||"",ss:v.ss||"",at:v.at||0}});if(s.length<3500000)localStorage.setItem("pa_cache",s)}catch(e){}}
+function cacheSave(v){try{const s=JSON.stringify({v:{values:v.values,sheetUrl:v.sheetUrl,grupos:v.grupos,ubicaciones:v.ubicaciones||null,ver:v.ver||"",ss:v.ss||"",at:v.at||0,chk:v.chk||0}});if(s.length<3500000)localStorage.setItem("pa_cache",s)}catch(e){}}
 function cacheLoad(){try{const c=JSON.parse(localStorage.getItem("pa_cache")||"null");if(c&&c.v){SU=c.v.sheetUrl||"";GM=c.v.grupos||[];ingest(c.v.values);ubisSet(c.v.ubicaciones);return true}}catch(e){}return false}
-function ubisSet(l){if(Array.isArray(l)&&l.length)UBICACIONES=l.slice();else if(l===null)UBICACIONES=UBI_BASE.slice();ubiOpts();drawUbl()}
+function ubisSet(l){if(Array.isArray(l))UBICACIONES=l.slice();else if(l===null)UBICACIONES=UBI_BASE.slice();ubiOpts();drawUbl()}
 let ubiPend="";
 function drawUbl(){const el=$("ubl");if(!el)return;const cnt={};recs.forEach(r=>{const u=ubiAct(r);if(u)cnt[u]=(cnt[u]||0)+1});
 el.innerHTML=UBICACIONES.map(u=>`<div class="ubi"><span>📍 ${esc(u)} <small>(${cnt[u]||0})</small></span><button data-u="${esc(u)}" class="${ubiPend===u?"":"s"}">${ubiPend===u?"¿Quitar?":"🗑️"}</button></div>`).join("")||'<small style="color:var(--mu)">Sin ubicaciones.</small>'}
@@ -830,7 +833,7 @@ $("cfgclean").onclick=async()=>{if(!cleanPend){cleanPend=true;$("cfgclean").text
 cleanPend=false;$("cfgclean").textContent="🧹 Limpiar filas eliminadas de la hoja";try{msg("Limpiando la hoja…");const r=await api({action:"limpiar"});await load(true,true);msg("Listo ✔: "+r.n+" fila"+(r.n==1?"":"s")+" eliminada"+(r.n==1?"":"s")+" de la hoja.")}catch(x){msg("No se pudo limpiar: "+err(x))}};
 async function load(force,completo){if(!gxSesion()&&!gxTk.mail){gxMostrarLogin();return}
 if(loading){if(force)again=true;return}if(!force&&recs.length&&Date.now()-lastLoad<15000)return;
-loading=true;try{if(!recs.length)msg("Cargando…");const v=await api(null,completo?"&completo=1":"");SU=v.sheetUrl||SU;GM=v.grupos||GM;ingest(v.values);ubisSet(v.ubicaciones);lastLoad=Date.now();cacheSave(v);gxDatosCuenta();if($("msg").textContent=="Cargando…"||$("msg").textContent.indexOf("Actualizando")==0)msg("");draw();drawTable();drawGroups()}
+loading=true;try{if(!recs.length&&!$("msg").textContent)msg("Cargando…");const v=await api(null,completo?"&completo=1":"");SU=v.sheetUrl||SU;GM=v.grupos||GM;ingest(v.values);ubisSet(v.ubicaciones);lastLoad=Date.now();cacheSave(v);gxDatosCuenta();if($("msg").textContent=="Cargando…"||$("msg").textContent.indexOf("Actualizando")==0)msg("");draw();drawTable();drawGroups()}
 catch(e){msg("No se pudo leer la hoja: "+err(e))}finally{loading=false;if(again){again=false;load(true)}}}
 async function nextFolio(){const v=await api(null,"&solo=folios");let ms=-1,mn=0;(v.folios||[]).forEach(x=>{const m=/^\s*(?:([A-Za-z])\s*[-\s]\s*)?0*(\d+)\s*$/.exec(String(x==null?"":x));if(!m)return;const si=(m[1]||"A").toUpperCase().charCodeAt(0)-65,n=parseInt(m[2],10);if(si>ms||(si==ms&&n>mn)){ms=si;mn=n}});
 if(ms<0){ms=0;mn=0}
