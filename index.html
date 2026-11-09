@@ -110,6 +110,14 @@ select:disabled{opacity:.6}
 .sh .pi{display:inline-flex;align-items:center;margin-right:5mm;font-size:8.5pt}.sh .pk{width:3mm;height:3mm;margin-right:1.5mm}
 .sh .psg{display:flex;justify-content:space-around;margin-top:2mm}.sh .sgw{width:70mm}.sh .sgi{height:14mm;display:flex;align-items:flex-end;justify-content:center}.sh .sgl{border-top:.3mm solid #1e1e1e;padding-top:1mm;text-align:center;font-size:7.5pt;font-weight:bold}.sh .sgn{text-align:center;font-size:7pt;margin-top:.6mm}.sh{position:relative}.sh .pwm{position:absolute;left:50%;top:50%;width:150mm;transform:translate(-50%,-50%);z-index:-1}.sh .plg{height:19mm;display:block}.sh .pts{float:right;font-size:5pt;color:#6e6e6e}
 .sh .pcl{font-size:7pt;margin-top:3mm;line-height:1.3}.sh .pft{text-align:center;font-size:6.5pt;color:#6e6e6e;margin-top:3mm}
+.ubi{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid var(--bd);border-radius:12px;margin:6px 0;background:var(--bg)}
+.ubi span{min-width:0;overflow:hidden;text-overflow:ellipsis}.ubi small{color:var(--mu)}.ubi button{flex:0 0 auto;padding:6px 12px}
+#p40t button{flex:1}#p40t button.on{background:var(--ac);color:#fff}
+.pvb button.pz{flex:0 0 46px;padding-left:0;padding-right:0}
+#pvs{touch-action:pan-x pan-y}
+.pvt{width:max-content!important;padding:6px}.pvt table{border-collapse:collapse;font:10pt Helvetica,Arial,sans-serif;white-space:nowrap}
+.pvt td,.pvt th{border:1px solid #999;padding:4px 7px;color:#1e1e1e;background:#fff;vertical-align:top}
+.pvt th{background:#eee;text-align:center;position:static}.pvt th.tt{background:#fde4de;color:#b4232a;font-size:12pt;text-align:left}
 .gxlg{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}
 .gxc{width:100%;max-width:380px;background:var(--card);border-radius:24px;box-shadow:var(--sh);padding:28px 22px;text-align:center}
 .gxc img{width:72%;max-width:230px;background:#fff;border-radius:12px;padding:4px 10px}
@@ -138,6 +146,9 @@ select:disabled{opacity:.6}
 <label>Modelo de marco</label><input type="text" id="modelo" placeholder="Toca para ver la lista o escribe">
 <label>Color de marco</label><input type="text" id="colormarco" placeholder="Toca para ver la lista o escribe">
 <div class="g"><div><label>Tipo de marco</label><select id="tipomarco"></select></div><div><label>Tipo de placa</label><select id="tipoplaca"></select></div></div>
+<div id="fdw" style="display:none"><label>No. de foto de la panorámica doble</label><input type="text" id="fotoDoble" class="ex" maxlength="40" placeholder="Ej. 9937"></div>
+<div id="p40w" style="display:none"><label>Marco de la 40x50 (paquete Cristal)</label><div class="row" id="p40t" style="margin-top:4px"><button type="button" class="s" data-t="Cristal">💎 Cristal</button><button type="button" class="s" data-t="Premium">⭐ Premium</button></div>
+<div id="p40p" style="display:none"><div class="g"><div><label>Modelo Premium</label><select id="p40m"></select></div><div><label>Color Premium</label><select id="p40c"></select></div></div></div><small id="p40x" class="plt"></small></div>
 <label>Color de placa · elige 2, en orden</label><div id="placa" class="plc"></div><small id="placaTxt" class="plt"></small></div>
 <div class="card"><h2>3 · Artículos seleccionados</h2><div id="arts"></div><div id="fotosT" style="display:none;margin-top:10px"><b>📷 Fotos y notas</b><br><small style="color:var(--mu)">El número de foto sale en el contrato. Las notas solo se ven en la app.</small></div><div id="fotos"></div></div>
 <div class="card"><h2>4 · Texto de agradecimiento</h2><label>Núm. de texto</label><input type="text" id="numtexto"><label>Observaciones</label><textarea id="obs" rows="2"></textarea></div>
@@ -168,13 +179,15 @@ select:disabled{opacity:.6}
 <div id="glist"></div></div>
 <div id="vx" class="v"><div class="card"><h2>Todos los clientes</h2><input type="text" id="q2" placeholder="Buscar varias palabras en la hoja…"><div class="row"><button id="bref2" class="s">🔄 Actualizar</button><button id="bxls">📊 Descargar Excel</button><button id="bsh" class="s">Abrir en Google Sheets</button></div><div class="tw" style="margin-top:10px"><table id="tb"></table></div></div></div>
 <div id="vs" class="v"><div class="card"><h2>Cuenta de Google</h2><div id="cfgacct" style="font-weight:700;word-break:break-all">—</div><small style="display:block;color:var(--mu);margin-top:4px">Tus contratos se guardan en el Google Drive de esta cuenta.</small><div class="row"><button id="cfgout" class="s">🚪 Cerrar sesión o cambiar de cuenta</button></div></div>
+<div class="card"><h2>📍 Ubicaciones del almacén</h2><small style="display:block;color:var(--mu)">La misma lista para todos los teléfonos. Puedes seccionar tu almacén, por ejemplo «Bodega A · Estante 1».</small><div id="ubl"></div>
+<div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="ubn" maxlength="80" placeholder="Nueva ubicación"><button id="uba" style="flex:0 0 auto">➕ Agregar</button></div></div>
 <div class="card"><h2>Ajustes</h2><label>Tu nombre (aparece como “Atendió” en los contratos que guardes)</label><input type="text" id="cfgusr" placeholder="Ej.: Juan">
 <label>Hoja de clientes</label><div id="cfgss" style="font-size:14px;margin:2px 0 6px"></div><input type="text" id="cfgssin" placeholder="Opcional: link de otra hoja" spellcheck="false">
 <label>Client ID de Google</label><input type="text" id="cfgcid" placeholder="….apps.googleusercontent.com" spellcheck="false">
-<div class="row"><button id="cfgsave">Guardar ajustes</button></div><small id="dbg" style="display:block;margin-top:10px;color:var(--mu)"></small></div></div>
+<div class="row"><button id="cfgsave">Guardar ajustes</button></div><div class="row"><button id="cfgclean" class="s">🧹 Limpiar filas eliminadas de la hoja</button></div><small style="display:block;color:var(--mu);margin-top:4px">Los contratos eliminados se ocultan en la hoja para que nunca se mezclen datos entre teléfonos. Límpialos de vez en cuando, cuando nadie esté guardando contratos.</small><small id="dbg" style="display:block;margin-top:10px;color:var(--mu)"></small></div></div>
 <div id="bb"><button data-s="Recibido"></button><button data-s="Proceso"></button><button data-s="Pendiente"></button><button data-s="Terminado"></button><button data-s="Entregado"></button><button data-s="Cancelado"></button></div>
 <div class="sgm" id="sgm"><div class="sgb"><b id="sgt">Firma</b><button id="sgc" class="s">Cancelar</button></div><canvas id="sgcv"></canvas><div class="sgb"><button id="sgl" class="s">Limpiar</button><button id="sga">✔ Aceptar firma</button></div></div>
-<div class="pv" id="pv"><div class="pvb"><button id="pvp">🖨️ Imprimir</button><button id="pvc" class="s">Cerrar</button></div><div class="pvs" id="pvs"><div id="pvw"><div class="sh pvq" id="pvx"></div></div></div></div>
+<div class="pv" id="pv"><div class="pvb"><button id="pvp">🖨️ Imprimir</button><button id="pvzo" class="s pz" aria-label="Alejar">➖</button><button id="pvzi" class="s pz" aria-label="Acercar">➕</button><button id="pvzf" class="s pz" aria-label="Ajustar a la pantalla">⤢</button><button id="pvc" class="s">Cerrar</button></div><div class="pvs" id="pvs"><div id="pvw"><div class="sh pvq" id="pvx"></div></div></div></div>
 <div class="mn" id="mn"><div class="mc" id="mc"></div></div>
 <p id="msg" style="color:var(--mu);font-size:13px"></p>
 <script>
@@ -192,7 +205,7 @@ const ESCUELAS=[["Centro de Actualización del Magisterio", "CAM"], ["Centro de 
 const CARRERAS=["Licenciatura en Médico Cirujano", "Licenciatura en Enfermería", "Licenciatura en Cirujano Dentista / Odontología", "Licenciatura en Químico Farmacobiólogo (QFB)", "Licenciatura en Psicología (Clínica, Educativa e Infantil)", "Licenciatura en Nutrición / Nutriología", "Licenciatura en Fisioterapia y Rehabilitación", "Licenciatura en Medicina Veterinaria y Zootecnia", "Licenciatura en Trabajo Social", "Licenciatura en Gerontología", "Licenciatura en Salud Intercultural", "Licenciatura en Medicina Integral y Salud Comunitaria", "Licenciatura en Biología", "Ingeniería Biomédica", "Licenciatura en Cosmetología y Cosmiatría", "Licenciatura en Derecho / Ciencias Jurídicas", "Licenciatura en Criminología y Criminalística", "Licenciatura en Ciencias de la Comunicación", "Licenciatura en Relaciones Internacionales", "Licenciatura en Sociología", "Licenciatura en Antropología Social", "Licenciatura en Historia", "Licenciatura en Filosofía", "Licenciatura en Lengua y Literatura Hispanoamericanas", "Licenciatura en Enseñanza del Inglés / Idiomas", "Licenciatura en Derechos Humanos", "Licenciatura en Comunicación Intercultural", "Licenciatura en Lengua y Cultura", "Licenciatura en Arqueología", "Licenciatura en Desarrollo Municipal y Gobernabilidad", "Licenciatura en Ciencias Políticas y Administración Pública", "Licenciatura en Periodismo", "Licenciatura en Gestión para el Desarrollo y la Diversidad", "Licenciatura en Justicia Social", "Licenciatura en Bienestar Humano y Comunitario", "Licenciatura en Educación Primaria", "Licenciatura en Pedagogía", "Licenciatura en Educación Preescolar", "Licenciatura en Educación Física y Deportes", "Licenciatura en Educación Especial / Inclusiva", "Licenciatura en Educación Secundaria (diversas especialidades)", "Licenciatura en Educación Bilingüe Intercultural", "Licenciatura en Puericultura y Desarrollo Infantil", "Licenciatura en Formación e Innovación Docente", "Licenciatura en Tecnologías de la Información Aplicadas a la Educación", "Licenciatura en Administración de Empresas", "Licenciatura en Contaduría Pública / Finanzas", "Licenciatura en Comercio e Internacionalización / Comercio Exterior", "Licenciatura en Marketing Digital y Mercadotecnia", "Ingeniería en Gestión Empresarial", "Licenciatura en Economía", "Licenciatura en Administración Turística", "Ingeniería en Logística y Cadena de Suministro", "Licenciatura en Finanzas y Banca", "Licenciatura en Gestión de la MiPyME", "Licenciatura en Publicidad y Relaciones Públicas", "Licenciatura en Mercadotecnia e Innovación Comercial", "Licenciatura en Negocios Digitales", "Licenciatura en Gerencia Social", "Licenciatura en Administración de Empresas Turísticas", "Licenciatura en Desarrollo Socioeconómico", "Licenciatura en Auditoría e Impuestos", "Licenciatura en Comercio Electrónico", "Ingeniería en Sistemas Computacionales", "Ingeniería Industrial", "Ingeniería en Desarrollo y Tecnologías de Software", "Ingeniería Mecatrónica", "Ingeniería Electrónica", "Ingeniería Eléctrica", "Ingeniería Mecánica", "Ingeniería en Inteligencia Artificial y Ciencia de Datos", "Ingeniería Informática", "Ingeniería en Telecomunicaciones", "Ingeniería en Ciberseguridad", "Ingeniería en Manufactura Avanzada", "Ingeniería en Nanotecnología", "Ingeniería Ferroviaria", "Ingeniería en Semiconductores", "Arquitectura de Sistemas con IA Generativa", "Ingeniería Química", "Licenciatura en Arquitectura", "Ingeniería Civil", "Ingeniería Topográfica e Hidrología", "Ingeniería Geomática", "Licenciatura en Ciencias de la Tierra", "Licenciatura en Diseño de Interiores y Urbanismo", "Ingeniería en Infraestructura y Desarrollo Comunitario", "Ingeniería en Geología / Geofísica", "Ingeniería Agrónoma (Fitotecnia, Zootecnia, Horticultura)", "Ingeniería Ambiental y Ecología", "Ingeniería en Energías Renovables / Desarrollo Sostenible", "Ingeniería Biotecnológica / Bioquímica", "Ingeniería Agroindustrial / Industrias Alimentarias", "Ingeniería Forestal", "Ingeniería en Innovación Agrícola Sustentable", "Licenciatura en Gastronomía / Culinaria", "Licenciatura en Turismo Sustentable / Turismo Alternativo", "Licenciatura en Artes Visuales y Plásticas", "Licenciatura en Música / Jazz y Música Popular", "Licenciatura en Artes Escénicas y Teatro"];
 const T=["folio","fecha","nombre","escuela","carrera","generacion","celular","telref","correo","modelo","colormarco","tipomarco","tipoplaca","numtexto","obs","total","pago1","pago2","pago3","pzAbono","pzAbono2","pzAbono3"];
 const ESTADOS=["Recibido","Proceso","Pendiente","Terminado","Entregado","Cancelado"],ICON={Recibido:"📥",Proceso:"🛠️",Pendiente:"⏳",Terminado:"✅",Entregado:"📦",Cancelado:"🚫"},JI=30;
-const UBICACIONES=["Bodega arriba","Bodega abajo","Oficina principal"];
+let UBICACIONES=["Bodega arriba","Bodega abajo","Oficina principal"];const UBI_BASE=UBICACIONES.slice();
 const visCols=x=>{const o=x.slice(0,JI);for(let i=JI+1;i<=JI+3;i++)o.push(x[i]==null?"":x[i]);return o};
 const ABS=[["pago1","pago1At"],["pago2","pago2At"],["pago3","pago3At"],["pzAbono","pzAbonoAt"],["pzAbono2","pzAbono2At"],["pzAbono3","pzAbono3At"]];
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -209,7 +222,9 @@ const pzKey=(a,i)=>i>1?a+"|"+i:a;
 const nPz=(r,a)=>(r.cant||{})[a]>1?+r.cant[a]:1;
 const fotosDe=(r,a)=>Array.from({length:nPz(r,a)},(_,k)=>String((r.fotos||{})[pzKey(a,k+1)]||"").trim());
 const fotosTxt=(r,a)=>fotosDe(r,a).filter(Boolean).join(", ");
-const artTxt=(r,a)=>{const q=(r.cant||{})[a],f=fotosTxt(r,a);return a+(q>1?" ×"+q:"")+(f?" #"+f:"")};
+const artTxt=(r,a)=>{const q=(r.cant||{})[a],f=fotosTxt(r,a),x=a=="40x50"?p40Txt(r):"";return a+(q>1?" ×"+q:"")+(f?" #"+f:"")+(x?" ["+x+"]":"")};
+function p40Txt(r){const p=r&&r.paquete=="Cristal"&&(r.articulos||[]).includes("40x50")&&r.p40;if(!p||!p.tipo)return"";return p.tipo=="Premium"?["Premium",p.modelo,p.color].filter(Boolean).join(" · "):"Cristal"}
+function tmTxt(r){const f=(r.fotos||{})["Panorámica"];return r.tipomarco=="Doble"&&f?"Doble · foto "+f:(r.tipomarco||r.tamano||"")}
 const placaTxt=r=>(r.placa||[]).join("/");
 const folioFull=r=>r.serie?r.serie+"-"+r.folio:(r.folio||"");
 function payInfo(r){const n=v=>+v||0,tot=n(r.total)+(r.extras||[]).reduce((a,x)=>a+n(x.importe),0),ab=n(r.pago1)+n(r.pago2)+n(r.pago3)+n(r.pzAbono)+n(r.pzAbono2)+n(r.pzAbono3);if(tot<=0)return null;return{tot,ab,rest:tot-ab}}
@@ -256,7 +271,7 @@ bt.onclick=()=>{if(inp.disabled)return;if(open){close();return}if(document.activ
 ["escuela","carrera","modelo","colormarco"].forEach(combo);
 $("paqSel").onchange=()=>{const c=CATALOGO[$("paqSel").value];if(!c)return;const quit=[];[["modelo","m","modelo"],["colormarco","c","color de marco"]].forEach(([id,k,n])=>{const v=$(id).value.trim();if(v&&!c[k].includes(v)&&PAQ.some(q=>CATALOGO[q][k].includes(v))){$(id).value="";quit.push(n)}});if(quit.length)msg("Se borró el "+quit.join(" y el ")+" porque no es de este paquete.")};
 $("pzs").innerHTML=[0,1,2,3,4].map(i=>`<div class="g"><input type="date" class="pf"><input type="number" class="pi" placeholder="Importe $"></div><input type="text" class="pp" placeholder="Pieza adicional" style="margin:4px 0 10px">`).join("");
-$("ubicacion").innerHTML='<option value="">Sin ubicación</option>'+UBICACIONES.map(u=>`<option>${esc(u)}</option>`).join("");
+function ubiOpts(){const s=$("ubicacion"),v=s.value;s.innerHTML='<option value="">Sin ubicación</option>'+UBICACIONES.map(u=>`<option>${esc(u)}</option>`).join("");if(v)setUbi(v)}ubiOpts();
 function setUbi(v){const s=$("ubicacion");if(v&&![...s.options].some(o=>o.value===v)){const o=document.createElement("option");o.textContent=v;s.appendChild(o)}s.value=v}
 $("ubicacion").onchange=()=>{ubiDirty=true};
 $("estadoSel").innerHTML=ESTADOS.map(x=>`<option value="${x}">${ICON[x]} ${x}</option>`).join("");
@@ -267,14 +282,28 @@ function fillGrpSel(v){const s=$("grupoSel"),n=grupos().map(g=>g.name);if(v&&v!=
 $("grupoSel").onchange=()=>{grpDirty=true;const nw=$("grupoSel").value=="__new";$("grupoNew").style.display=nw?"block":"none";if(nw)$("grupoNew").focus()};
 $("grupoNew").oninput=()=>{grpDirty=true};
 $("hlogo").src=LOGO_UI;
+// Panorámica doble: solo la doble lleva número de foto.
+const fdVis=()=>{$("fdw").style.display=$("tipomarco").value=="Doble"?"block":"none"};
+$("tipomarco").addEventListener("change",fdVis);
+// Paquete Cristal: la 40x50 puede ir en Cristal o en Premium (con su modelo y color).
+let p40={tipo:"",modelo:"",color:""};
+$("p40m").innerHTML=opts(CATALOGO.Premium.m,"Elige el modelo…");$("p40c").innerHTML=opts(CATALOGO.Premium.c,"Elige el color…");
+function drawP40(){$("p40w").style.display=$("paqSel").value=="Cristal"?"block":"none";
+document.querySelectorAll("#p40t button").forEach(b=>{b.classList.toggle("on",b.dataset.t===p40.tipo);b.disabled=lockOn});
+$("p40p").style.display=p40.tipo=="Premium"?"block":"none";$("p40m").value=p40.modelo||"";$("p40c").value=p40.color||"";
+const c40=document.querySelector('#arts input[value="40x50"]'),t40=c40&&c40.checked;
+$("p40x").innerHTML=!t40?"Marca «40x50» en la sección 3 si el paquete la lleva.":p40.tipo?"En el contrato: <b>"+esc(p40Txt({paquete:"Cristal",articulos:["40x50"],p40}))+"</b>":"⚠️ Elige cómo va la 40x50."}
+$("p40t").onclick=e=>{const b=e.target.closest("button");if(!b||lockOn)return;p40.tipo=b.dataset.t;drawP40()};
+$("p40m").onchange=()=>{p40.modelo=$("p40m").value;drawP40()};$("p40c").onchange=()=>{p40.color=$("p40c").value;drawP40()};
+$("paqSel").addEventListener("change",drawP40);$("arts").addEventListener("change",e=>{if(e.target.value=="40x50")drawP40()});
 const chk=n=>[...document.querySelectorAll(`input[name=${n}]:checked`)].map(e=>e.value);
 let cur=null,editing=false,flt=null,recs=[],rows=[],hx={},lastLoad=0,loading=false,again=false,lim=40,SU="",ufl="",ubiDirty=false,grpDirty=false,estDirty=false,gfl="",GM=[],gUrl="",grpNew="",grpCtx="",gNames=[],gCur="",selPend=false;
-let mnId=null,mnV="main",pend=null,mnAt=0,pvR=null,sg={f1:"",f2:""},selMode=false,sel=new Set();
+let resv=null,pvMode="",pvK=1,pvZ=1,mnId=null,mnV="main",pend=null,mnAt=0,pvR=null,sg={f1:"",f2:""},selMode=false,sel=new Set();
 const msg=t=>{$("msg").textContent=t};
 // ================= Navegación (el botón atrás regresa paso a paso) =================
 const VIEWS=["vi","vp","vg","vx","vs"],scr={};let S={v:"",f:null,ov:""},exitArmed=false;
-const mkTok=(v,f,ov)=>v+(f?":"+f:"")+(ov?"~"+ov:"");
-function parseTok(t){const a=String(t||"").split("~"),b=a[0].split(":");return{v:VIEWS.includes(b[0])?b[0]:"vi",f:ESTADOS.includes(b[1])?b[1]:null,ov:a[1]||""}}
+const mkTok=(v,f,ov)=>"!"+v+(f?":"+f:"")+(ov?"~"+ov:"");
+function parseTok(t){const a=String(t||"").replace(/^!/,"").split("~"),b=a[0].split(":");return{v:VIEWS.includes(b[0])?b[0]:"vi",f:ESTADOS.includes(b[1])?b[1]:null,ov:a[1]||""}}
 const curTok=()=>location.hash.slice(1);
 function go(v,f,ov){const t=mkTok(v,f||null,ov||"");if(curTok()===t){applyTok(t);return}location.hash=t}
 function swap(v,f,ov){const t=mkTok(v,f||null,ov||"");if(curTok()===t){applyTok(t);return}location.replace("#"+t)}
@@ -288,7 +317,7 @@ $("mn").style.display=p.ov=="menu"&&mnId?"flex":"none";
 $("pv").style.display=p.ov=="pv"&&pvR?"flex":"none";
 if(p.ov=="sg")sgOpen();else $("sgm").style.display="none"}
 window.addEventListener("hashchange",()=>{const t=curTok();
-if(!t){if(!exitArmed){exitArmed=true;msg("Presiona atrás otra vez para salir");setTimeout(()=>{exitArmed=false},2000);location.hash="vi";return}history.back();return}
+if(!t){if(!exitArmed){exitArmed=true;msg("Presiona atrás otra vez para salir");setTimeout(()=>{exitArmed=false},2000);location.hash="!vi";return}history.back();return}
 applyTok(t)});
 document.querySelector("nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;go(b.dataset.v,null)};
 $("bb").onclick=e=>{const b=e.target.closest("button");if(!b)return;go("vp",b.dataset.s)};
@@ -301,17 +330,18 @@ function read(){const r={_id:cur?cur._id:"c"+Date.now(),_row:cur?cur._row:null,p
 r.estado=$("estadoSel").value||"Recibido";r.cancelado=r.estado=="Cancelado";r.notaPend=r.estado=="Pendiente"?$("estadoNota").value.trim():"";
 ABS.forEach(x=>r[x[1]]=cur?cur[x[1]]||"":"");
 r.fotos={};r.notas={};document.querySelectorAll("#fotos .fn").forEach(e=>{if(e.dataset.a)(e.dataset.k=="f"?r.fotos:r.notas)[e.dataset.a]=e.value.trim()});
+if(r.tipomarco=="Doble"&&$("fotoDoble").value.trim())r.fotos["Panorámica"]=$("fotoDoble").value.trim();else delete r.fotos["Panorámica"];
 r.firma1=sg.f1;r.firma2=sg.f2;r.firma2At=sg.f2?sgAt.f2:"";r.recibe=$("recibe").value.trim();r.ubicacion=$("ubicacion").value;r.grupo=$("grupoSel").value=="__new"?$("grupoNew").value.trim().slice(0,60):$("grupoSel").value;
-r.paquete=$("paqSel").value;r.placa=plSel.slice();r.articulos=chk("arts");r.cant={};r.articulos.forEach(a=>{const e=document.querySelector('.qn[data-a="'+a+'"]'),q=Math.round(+(e&&e.value)||1);if(q>1)r.cant[a]=Math.min(99,q)});r.regalias=chk("regs");
+r.paquete=$("paqSel").value;r.placa=plSel.slice();r.articulos=chk("arts");r.cant={};r.articulos.forEach(a=>{const e=document.querySelector('.qn[data-a="'+a+'"]'),q=Math.round(+(e&&e.value)||1);if(q>1)r.cant[a]=Math.min(99,q)});r.regalias=chk("regs");r.p40=r.paquete=="Cristal"&&r.articulos.includes("40x50")&&p40.tipo?{tipo:p40.tipo,modelo:p40.tipo=="Premium"?p40.modelo:"",color:p40.tipo=="Premium"?p40.color:""}:null;
 const f=[...document.querySelectorAll(".pf")],p=[...document.querySelectorAll(".pp")],m=[...document.querySelectorAll(".pi")];
 r.extras=f.map((e,i)=>({fecha:e.value,pieza:p[i].value,importe:m[i].value})).filter(x=>x.fecha||x.pieza||x.importe);return r}
 function rec(){const r=read();if(cur&&cur._row){const m={extras:r.extras,pago1:r.pago1,pago2:r.pago2,pago3:r.pago3,pzAbono:r.pzAbono,pzAbono2:r.pzAbono2,pzAbono3:r.pzAbono3,firma1:cur.firma1||sg.f1,firma2:cur.firma2||sg.f2,firma2At:cur.firma2?(cur.firma2At||""):(sg.f2?sgAt.f2:""),recibe:cur.recibe||r.recibe};
-if(editing){m.fotos=Object.assign({},cur.fotos||{},r.fotos);m.notas=Object.assign({},cur.notas||{},r.notas)}
+if(editing){m.fotos=Object.assign({},cur.fotos||{},r.fotos);m.notas=Object.assign({},cur.notas||{},r.notas);if(cur.tipomarco=="Doble"){const fdv=$("fotoDoble").value.trim();if(fdv)m.fotos["Panorámica"]=fdv;else delete m.fotos["Panorámica"]}}
 const f=recs.find(x=>x._id==cur._id);m.ubicacion=ubiDirty?r.ubicacion:(f?(f.ubicacion||""):(cur.ubicacion||""));m.grupo=grpDirty?r.grupo:(f?(f.grupo||""):(cur.grupo||""));if(estDirty){m.estado=r.estado;m.notaPend=r.notaPend;m.cancelado=r.cancelado}else if(f){m.estado=f.estado;m.notaPend=f.notaPend;m.cancelado=f.cancelado}return Object.assign({},cur,m)}return r}
 function stampAbonos(r,prev){const ts=nowTs();ABS.forEach(x=>{const v=String(r[x[0]]==null?"":r[x[0]]).trim(),o=prev?String(prev[x[0]]==null?"":prev[x[0]]).trim():"";if(!v)r[x[1]]="";else if(v!==o||!r[x[1]])r[x[1]]=ts})}
-function setLock(on){lockOn=on;document.querySelectorAll("#f input,#f textarea,#f select").forEach(e=>{const c=e.classList,p=c.contains("pf")||c.contains("pp")||c.contains("pi")||c.contains("ex")||e.id=="ubicacion"||e.id=="grupoSel"||e.id=="estadoSel";e.disabled=on&&!p});drawPlaca();$("lk").style.display=on?"block":"none"}
+function setLock(on){lockOn=on;setTimeout(drawP40,0);document.querySelectorAll("#f input,#f textarea,#f select").forEach(e=>{const c=e.classList,p=c.contains("pf")||c.contains("pp")||c.contains("pi")||c.contains("ex")||e.id=="ubicacion"||e.id=="grupoSel"||e.id=="estadoSel";e.disabled=on&&!p});drawPlaca();$("lk").style.display=on?"block":"none"}
 function renderFotos(r){const on=!!r&&(r.articulos||[]).length>0;$("fotosT").style.display=on?"block":"none";
-$("fotos").innerHTML=on?r.articulos.map(a=>{const q=nPz(r,a);return Array.from({length:q},(_,k)=>{const key=pzKey(a,k+1);return`<div class="ft"><b>${esc(a)}${q>1?` <small style="color:var(--mu);font-weight:600">· pieza ${k+1} de ${q}</small>`:""}</b><div class="g"><div><label>No. de foto</label><input type="text" class="fn ex" data-k="f" data-a="${esc(key)}" value="${esc((r.fotos||{})[key]||"")}"></div><div><label>Notas (solo en la app)</label><input type="text" class="fn ex" data-k="n" data-a="${esc(key)}" value="${esc((r.notas||{})[key]||"")}"></div></div></div>`}).join("")}).join(""):""}
+$("fotos").innerHTML=on?r.articulos.map(a=>{const q=nPz(r,a);return Array.from({length:q},(_,k)=>{const key=pzKey(a,k+1);return`<div class="ft"><b>${esc(a)}${q>1?` <small style="color:var(--mu);font-weight:600">· pieza ${k+1} de ${q}</small>`:""}</b><div class="g">${a=="Panorámica"?'<div><label>No. de foto</label><small style="display:block;color:var(--mu);padding-top:12px">'+(r.tipomarco=="Doble"?"Va arriba, en «Tipo de marco: Doble»":"La panorámica normal no lleva número")+'</small></div>':`<div><label>No. de foto</label><input type="text" class="fn ex" data-k="f" data-a="${esc(key)}" value="${esc((r.fotos||{})[key]||"")}"></div>`}<div><label>Notas (solo en la app)</label><input type="text" class="fn ex" data-k="n" data-a="${esc(key)}" value="${esc((r.notas||{})[key]||"")}"></div></div></div>`}).join("")}).join(""):""}
 function renderAts(r){ABS.forEach(x=>{$(x[1]).textContent=r&&r[x[1]]?"🕒 "+fts(r[x[1]]):""})}
 function updRestas(){const n=id=>+($(id).value)||0,t=n("total"),ab=n("pago1")+n("pago2")+n("pago3");
 const pt=[...document.querySelectorAll(".pi")].reduce((a,e)=>a+(+e.value||0),0),pa=n("pzAbono")+n("pzAbono2")+n("pzAbono3");
@@ -344,12 +374,12 @@ $("sga").onclick=()=>{const n=sgStrokes.reduce((a,s)=>a+s.length,0);if(n<3){msg(
 $("sgc").onclick=()=>closeOv();
 $("sg1b").onclick=()=>{sgWho="f1";go(S.v,S.f,"sg")};$("sg2b").onclick=()=>{sgWho="f2";go(S.v,S.f,"sg")};
 $("sg1x").onclick=()=>{sg.f1="";renderFirmas()};$("sg2x").onclick=()=>{sg.f2="";sgAt.f2="";renderFirmas()};
-function fill(r){cur=r||null;editing=!!r;renderFotos(r);$("serie").value=r?(r.serie||(r.folio?"A":"")):"";T.forEach(k=>$(k).value=(r&&r[k])||"");setSel("paqSel",(r&&r.paquete)||"");setSel("tipomarco",(r&&r.tipomarco)||"");setSel("tipoplaca",(r&&r.tipoplaca)||"");plSel=placaArr(r);drawPlaca();document.querySelectorAll(".qn").forEach(i=>{i.value=(r&&r.cant&&r.cant[i.dataset.a])||1});setUbi((r&&r.ubicacion)||"");ubiDirty=false;$("estadoSel").value=r?estadoOf(r):"Recibido";$("estadoNota").value=(r&&r.notaPend)||"";estNotaVis();estDirty=false;$("grupoNew").value="";fillGrpSel((r&&r.grupo)||"");grpDirty=false;
+function fill(r){cur=r||null;editing=!!r;resv=null;p40=r&&r.p40?Object.assign({tipo:"",modelo:"",color:""},r.p40):{tipo:"",modelo:"",color:""};$("fotoDoble").value=(r&&r.fotos&&r.fotos["Panorámica"])||"";renderFotos(r);$("serie").value=r?(r.serie||(r.folio?"A":"")):"";T.forEach(k=>$(k).value=(r&&r[k])||"");setSel("paqSel",(r&&r.paquete)||"");setSel("tipomarco",(r&&r.tipomarco)||"");fdVis();setSel("tipoplaca",(r&&r.tipoplaca)||"");plSel=placaArr(r);drawPlaca();document.querySelectorAll(".qn").forEach(i=>{i.value=(r&&r.cant&&r.cant[i.dataset.a])||1});setUbi((r&&r.ubicacion)||"");ubiDirty=false;$("estadoSel").value=r?estadoOf(r):"Recibido";$("estadoNota").value=(r&&r.notaPend)||"";estNotaVis();estDirty=false;$("grupoNew").value="";fillGrpSel((r&&r.grupo)||"");grpDirty=false;
 document.querySelectorAll("#f input[type=radio],#f input[type=checkbox]").forEach(e=>{const n=e.name,v=e.value;
 e.checked=!!r&&(n=="paq"?r.paquete==v:n=="placa"?r.placa.includes(v):n=="arts"?r.articulos.includes(v):r.regalias.includes(v))});document.querySelectorAll("#arts .ckr").forEach(d=>d.classList.toggle("on",d.querySelector("input[type=checkbox]").checked));
 [0,1,2,3,4].forEach(i=>{const x=(r&&r.extras[i])||{};document.querySelectorAll(".pf")[i].value=x.fecha||"";document.querySelectorAll(".pp")[i].value=x.pieza||"";document.querySelectorAll(".pi")[i].value=x.importe||""});
 sg={f1:r&&r.firma1||"",f2:r&&r.firma2||""};sgAt={f1:"",f2:(r&&r.firma2At)||""};$("recibe").value=(r&&r.recibe)||"";renderFirmas();renderAts(r);
-if(!r)$("fecha").value=hoy();setLock(!!r);$("recibe").disabled=!!(r&&r.firma2&&r.recibe);updRestas();if(S.ov)swap("vi");else go("vi");scrollTo(0,0)}
+if(!r)$("fecha").value=hoy();setLock(!!r);drawP40();$("recibe").disabled=!!(r&&r.firma2&&r.recibe);updRestas();if(S.ov)swap("vi");else go("vi");scrollTo(0,0)}
 // ================= Inicio de sesión con Google =================
 const LS={get:k=>{try{return localStorage.getItem(k)||""}catch(e){return""}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
 // Si la app corre dentro del APK de Pixel Arte, Android hace el inicio de sesión, guarda archivos, abre links e imprime.
@@ -417,14 +447,21 @@ msg("Abriendo… (el link también quedó copiado por si no se abre)");let w=nul
 const err=e=>e&&e.message?e.message:String(e);
 const okj=j=>{if(j.error)throw new Error(j.error=="clave"?"La clave no coincide con la del script.":j.error);return j};
 // ================= Conexión directa con tu Google Sheets y Google Drive (ya no se usa Apps Script) =================
-// Hace lo mismo que hacía el script (Code.gs), pero desde la app, con la cuenta de Google con la que inicias sesión.
+// Pensado para muchos usuarios a la vez (misma hoja):
+//  • Las filas nunca se recorren: los contratos nuevos se agregan al final en una sola operación y al borrar se marcan "(eliminado)" y se ocultan.
+//  • El folio se aparta primero (fila "(reservado)") y se revisa que nadie más tenga el mismo.
+//  • Cada fila lleva un ID y una marca de cambio: si otra persona editó el contrato, se avisa en lugar de sobrescribir.
+//  • Lectura incremental: si la hoja no cambió (versión de Drive) no se descarga nada; si cambió, solo las filas que cambiaron.
 const GG={SHT:"https://sheets.googleapis.com/v4/spreadsheets",DRV:"https://www.googleapis.com/drive/v3",UPL:"https://www.googleapis.com/upload/drive/v3",
-LIBRO:"Clientes Pixel Arte",CARPETA:"Contratos Pixel Arte",CARPETA_GRUPOS:"Grupos Pixel Arte",GRUPOS:"Grupos",
-TEXTO:[1,6,7,8,16],JC:31,EST:27,UBI:32,GRP:33,TPL:34,TMC:14,
+LIBRO:"Clientes Pixel Arte",CARPETA:"Contratos Pixel Arte",CARPETA_GRUPOS:"Grupos Pixel Arte",GRUPOS:"Grupos",UBIS:"Ubicaciones",
+TEXTO:[1,6,7,8,16],JC:31,EST:27,UBI:32,GRP:33,TPL:34,ID:35,CHG:36,NC:36,TMC:14,
+DEL:"(eliminado)",RES:"(reservado)",UBI_DEL:"eliminada",
 ENC_GRUPOS:["Grupo","Creado","Ubicación","Notas","Link del Sheet del grupo","ID (no editar)","Actualizado"],
-ENC:["Folio","Fecha","Nombre","Escuela","Carrera","Generación","Celular","Tel. referencia","Correo","Paquete","Modelo marco","Color marco","Color placa (1º/2º)","Tipo de marco","Artículos","Núm. texto","Observaciones","Total","Abono 1","Abono 2","Saldo","Entrega","Piezas adicionales","Regalías","Link PDF","Abono 3","Estado","Piezas adic. total","Piezas adic. abono","Piezas adic. resta","Datos de la app (no editar)","Ubicación del producto","Grupo","Tipo de placa"],
-COLORES:{Recibido:"#cfe2f3",Proceso:"#d9d2e9",Pendiente:"#fce5cd",Terminado:"#d9ead3",Entregado:"#b6d7a8"}};
-let GB={m:null,f:"",fg:""};
+ENC_UBIS:["Ubicación","Estado"],
+ENC:["Folio","Fecha","Nombre","Escuela","Carrera","Generación","Celular","Tel. referencia","Correo","Paquete","Modelo marco","Color marco","Color placa (1º/2º)","Tipo de marco","Artículos","Núm. texto","Observaciones","Total","Abono 1","Abono 2","Saldo","Entrega","Piezas adicionales","Regalías","Link PDF","Abono 3","Estado","Piezas adic. total","Piezas adic. abono","Piezas adic. resta","Datos de la app (no editar)","Ubicación del producto","Grupo","Tipo de placa","ID (no editar)","Cambio (no editar)"],
+COLORES:{Recibido:"#cfe2f3",Proceso:"#d9d2e9",Pendiente:"#fce5cd",Terminado:"#d9ead3",Entregado:"#b6d7a8"},
+F_SALDO:"=INDEX(R:R,ROW())-INDEX(S:S,ROW())-INDEX(T:T,ROW())-INDEX(Z:Z,ROW())",F_RESTA:"=INDEX(AB:AB,ROW())-INDEX(AC:AC,ROW())"};
+let GB={m:null,mAt:0,f:"",fg:"",hdr:false,c:null};
 // ----- utilidades -----
 const gxCol=n=>{let s="";while(n>0){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s};
 const gxA1=(t,r)=>"'"+String(t).replace(/'/g,"''")+"'!"+r;
@@ -433,30 +470,42 @@ const gxR=(sid,r,c,nr,nc)=>({sheetId:sid,startRowIndex:r-1,endRowIndex:r-1+(nr||
 const gxTxt=(sid,r,c,nr,nc)=>({repeatCell:{range:gxR(sid,r,c,nr,nc),cell:{userEnteredFormat:{numberFormat:{type:"TEXT"}}},fields:"userEnteredFormat.numberFormat"}});
 const gxCelda=(t,r,c,v)=>({range:gxA1(t,gxCol(c)+r),values:[[v]]});
 const gxBorrarFila=(sid,f)=>({deleteDimension:{range:{sheetId:sid,dimension:"ROWS",startIndex:f-1,endIndex:f}}});
+const gxOcultar=(sid,f)=>({updateDimensionProperties:{range:{sheetId:sid,dimension:"ROWS",startIndex:f-1,endIndex:f},properties:{hiddenByUser:true},fields:"hiddenByUser"}});
 const gxPad=(rows,w)=>{let W=w||0;rows.forEach(x=>{if(x.length>W)W=x.length});return rows.map(x=>{const y=x.slice();while(y.length<W)y.push("");return y})};
 const gxYmd=v=>{const d=new Date(Math.round((Math.floor(v+1e-7)-25569)*864e5)),p=n=>String(n).padStart(2,"0");return d.getUTCFullYear()+"-"+p(d.getUTCMonth()+1)+"-"+p(d.getUTCDate())};
+const gxFechas=(row,cols)=>{cols.forEach(j=>{const v=row[j];if(typeof v=="number"&&v>20000&&v<80000)row[j]=gxYmd(v)});return row};
 const gxAhora=()=>{const d=new Date(),p=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds())};
 const gxRec=v=>{try{const r=JSON.parse(v);return r&&typeof r=="object"?r:null}catch(e){return null}};
+const gxStamp=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const gxTituloGrupo=n=>(/^grupo\b/i.test(n)?n:"Grupo "+n)+" · Pixel Arte";
 const gxEspera=ms=>new Promise(ok=>setTimeout(ok,ms));
+// Para escribir "como si lo tecleara una persona" sin que Google cambie textos: el apóstrofo inicial obliga a guardarlo como texto.
+const gxUE=v=>typeof v=="string"&&v!==""&&v[0]!=="="&&!/^\d{4}-\d\d-\d\d$/.test(v)?"'"+v:v;
+const gxFilaDe=rango=>{const m=/![A-Z]+(\d+)/.exec(String(rango||""));return m?+m[1]:0};
 function gxMsgErr(st,m){m=String(m||"");
-if(st==403&&/has not been used|is disabled|SERVICE_DISABLED|not been enabled/i.test(m))return"Falta activar Google Sheets API y Google Drive API en tu proyecto de Google Cloud (paso 1 de la guía).";
+if(st==403&&/has not been used|is disabled|SERVICE_DISABLED|not been enabled/i.test(m))return"Falta activar Google Sheets API y Google Drive API en tu proyecto de Google Cloud.";
 if(st==403&&/insufficient|scope|permission/i.test(m))return"Google no dio permiso para tu Drive. Ve a ⚙, cierra sesión y vuelve a entrar marcando la casilla de Google Drive.";
+if(st==429)return"Google está recibiendo demasiadas solicitudes en este momento. Espera unos segundos e intenta de nuevo.";
 if(st==404)return"No se encontró el archivo en tu Drive (quizá se borró).";
 return"Google respondió con un error ("+st+(m?": "+m:"")+")."}
-// Llama a Google con tu sesión. Reintenta solo si Google está saturado.
+// Llama a Google con tu sesión. Si Google está saturado reintenta con esperas crecientes (y un poco al azar, para que no reintenten todos a la vez).
 async function gxFetch(url,opt,n){opt=opt||{};n=n||0;
 const h=Object.assign({Authorization:"Bearer "+(await gxToken())},opt.headers||{});
 if(typeof opt.body=="string"&&!h["Content-Type"])h["Content-Type"]="application/json";
-let r;try{r=await fetch(url,Object.assign({},opt,{headers:h}))}catch(e){throw new Error("Sin conexión a internet (o Google no respondió). Intenta de nuevo.")}
+let r;try{r=await fetch(url,Object.assign({},opt,{headers:h}))}catch(e){if(n<2){await gxEspera(1200*(n+1));return gxFetch(url,opt,n+1)}throw new Error("Sin conexión a internet (o Google no respondió). Intenta de nuevo.")}
 if(r.status==401&&n<1){gxTokenMalo();return gxFetch(url,opt,n+1)}
-if((r.status==429||r.status>=500)&&n<4){await gxEspera(1500*Math.pow(2,n));return gxFetch(url,opt,n+1)}
+if((r.status==429||r.status>=500)&&n<5){await gxEspera(1000*Math.pow(2,n)+Math.random()*1200);return gxFetch(url,opt,n+1)}
 if(!r.ok){let m="";try{const j=await r.json();m=j.error?(j.error.message||j.error):""}catch(e){}const e=new Error(gxMsgErr(r.status,m));e.status=r.status;throw e}
 const t=await r.text();return t?JSON.parse(t):{}}
-function gxGet(id,ranges,serial){return gxFetch(GG.SHT+"/"+id+"/values:batchGet?"+ranges.map(r=>"ranges="+encodeURIComponent(r)).join("&")+"&majorDimension=ROWS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption="+(serial?"SERIAL_NUMBER":"FORMATTED_STRING")).then(j=>ranges.map((_,k)=>((j.valueRanges||[])[k]||{}).values||[]))}
+function gxGet(id,ranges){if(!ranges.length)return Promise.resolve([]);return gxFetch(GG.SHT+"/"+id+"/values:batchGet?"+ranges.map(r=>"ranges="+encodeURIComponent(r)).join("&")+"&majorDimension=ROWS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER").then(j=>ranges.map((_,k)=>((j.valueRanges||[])[k]||{}).values||[]))}
+async function gxGetMuchos(id,ranges){const out=[];for(let i=0;i<ranges.length;i+=80)out.push(...await gxGet(id,ranges.slice(i,i+80)));return out}
 // RAW = se guarda tal cual (texto, números). USER_ENTERED = como si lo escribieras tú (fórmulas y fechas).
 function gxPut(id,data,user){data=data.filter(Boolean);if(!data.length)return Promise.resolve({});return gxFetch(GG.SHT+"/"+id+"/values:batchUpdate",{method:"POST",body:JSON.stringify({valueInputOption:user?"USER_ENTERED":"RAW",data})})}
 function gxBatch(id,requests){requests=requests.filter(Boolean);if(!requests.length)return Promise.resolve({});return gxFetch(GG.SHT+"/"+id+":batchUpdate",{method:"POST",body:JSON.stringify({requests})})}
+// Agrega una fila al final en UNA sola operación de Google (dos teléfonos a la vez nunca caen en la misma fila). Devuelve el número de fila.
+async function gxAgregar(id,titulo,fila){const j=await gxFetch(GG.SHT+"/"+id+"/values/"+encodeURIComponent(gxA1(titulo,"A1"))+":append?valueInputOption=USER_ENTERED&insertDataOption=OVERWRITE&includeValuesInResponse=false",{method:"POST",body:JSON.stringify({values:[fila.map(v=>v==null?"":gxUE(v))]})});
+const n=gxFilaDe(j.updates&&j.updates.updatedRange);if(!n)throw new Error("Google no confirmó en qué fila se guardó. Intenta de nuevo.");return n}
+const gxVersion=id=>gxFetch(GG.DRV+"/files/"+id+"?fields=version").then(j=>String(j.version||""));
 // ----- hoja principal, carpeta de PDFs -----
 const GX_META="spreadsheetId,spreadsheetUrl,sheets.properties(sheetId,title,index,gridProperties(rowCount,columnCount))";
 async function gxBuscarLibro(){
@@ -465,16 +514,17 @@ const r=await gxFetch(GG.DRV+"/files?pageSize=10&fields=files(id)&orderBy="+enco
 if(r.files&&r.files.length)return r.files[0].id;
 let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){}
 const p={title:GG.LIBRO,locale:"es_MX"};if(tz)p.timeZone=tz;
-const c=await gxFetch(GG.SHT,{method:"POST",body:JSON.stringify({properties:p,sheets:[{properties:{gridProperties:{rowCount:1000,columnCount:GG.ENC.length,frozenRowCount:1}}}]})});
+const c=await gxFetch(GG.SHT,{method:"POST",body:JSON.stringify({properties:p,sheets:[{properties:{gridProperties:{rowCount:1000,columnCount:GG.NC,frozenRowCount:1}}}]})});
 await gxPut(c.spreadsheetId,[{range:gxA1(c.sheets[0].properties.title,"A1"),values:[GG.ENC]}]);
 return c.spreadsheetId}
-async function gxMeta(force){if(GB.m&&!force)return GB.m;
+async function gxMeta(force){if(GB.m&&!force&&Date.now()-GB.mAt<600000)return GB.m;
 let id=LS.get("pa_ss"),j=null;const F="?fields="+encodeURIComponent(GX_META);
 if(id){try{j=await gxFetch(GG.SHT+"/"+id+F)}catch(e){if(e.status!=404&&e.status!=403&&e.status!=400)throw e;LS.set("pa_ss","")}}
 if(!j){id=await gxBuscarLibro();j=await gxFetch(GG.SHT+"/"+id+F)}
 LS.set("pa_ss",j.spreadsheetId);
 const ps=j.sheets.map(s=>s.properties).sort((a,b)=>a.index-b.index);
-GB.m={id:j.spreadsheetId,url:j.spreadsheetUrl,h:ps[0],g:ps.find(p=>p.title===GG.GRUPOS)||null};return GB.m}
+if(GB.m&&GB.m.id!==j.spreadsheetId)GB.c=null;
+GB.m={id:j.spreadsheetId,url:j.spreadsheetUrl,h:ps[0],g:ps.find(p=>p.title===GG.GRUPOS)||null,u:ps.find(p=>p.title===GG.UBIS)||null};GB.mAt=Date.now();GB.hdr=false;return GB.m}
 async function gxBuscarCarpeta(nombre,padre){let q="name='"+nombre+"' and mimeType='application/vnd.google-apps.folder' and trashed=false";if(padre)q+=" and '"+padre+"' in parents";
 const r=await gxFetch(GG.DRV+"/files?pageSize=1&fields=files(id)&orderBy=createdTime&q="+encodeURIComponent(q));
 if(r.files&&r.files.length)return r.files[0].id;
@@ -489,7 +539,7 @@ const r=await gxFetch(GG.UPL+"/files?uploadType=multipart&fields=id,webViewLink"
 return r.webViewLink||"https://drive.google.com/file/d/"+r.id+"/view?usp=drivesdk"}
 // Manda a la papelera de Drive el archivo de un link (se puede recuperar 30 días).
 async function gxPapelera(link){const m=/\/d\/([-\w]{20,})/.exec(String(link||""));if(!m)return;try{await gxFetch(GG.DRV+"/files/"+m[1]+"?fields=id",{method:"PATCH",body:JSON.stringify({trashed:true})})}catch(e){}}
-async function gxFilas(m){let v=(await gxGet(m.id,[gxA1(m.h.title,"A1:"+gxCol(m.h.gridProperties.columnCount))],true))[0];if(!v.length)v=[[]];return gxPad(v,GG.TPL)}
+async function gxFilas(m){let v=(await gxGet(m.id,[gxA1(m.h.title,"A1:"+gxCol(m.h.gridProperties.columnCount))]))[0];if(!v.length)v=[[]];return gxPad(v,GG.NC)}
 // ----- formato de las filas -----
 function gxPintar(sid,fila,est){const k="userEnteredFormat.backgroundColor,userEnteredFormat.textFormat.foregroundColor",r=gxR(sid,fila,1,1,GG.JC);
 if(est==="Cancelado")return[{repeatCell:{range:r,cell:{userEnteredFormat:{backgroundColor:gxRGB("#f4cccc"),textFormat:{foregroundColor:gxRGB("#990000")}}},fields:k}}];
@@ -501,14 +551,15 @@ if(o.size){tf().fontSize=o.size;k.push("userEnteredFormat.textFormat.fontSize")}
 if(o.bg){f.backgroundColor=gxRGB(o.bg);k.push("userEnteredFormat.backgroundColor")}
 if(o.color){tf().foregroundColor=gxRGB(o.color);k.push("userEnteredFormat.textFormat.foregroundColor")}
 if(o.center){f.horizontalAlignment="CENTER";k.push("userEnteredFormat.horizontalAlignment")}
+if(o.wrap){f.wrapStrategy="WRAP";k.push("userEnteredFormat.wrapStrategy")}
 return k.length?{repeatCell:{range:rg,cell:{userEnteredFormat:f},fields:k.join(",")}}:null}
 function gxBorde(rg){const b={style:"SOLID",color:gxRGB("#999999")};return{updateBorders:{range:rg,top:b,bottom:b,left:b,right:b,innerHorizontal:b,innerVertical:b}}}
 // ----- hojas con formato anterior (igual que hacía el script) -----
 const gxNecesitaMigrar=enc=>enc.indexOf("Estado")!==GG.EST-1;
-const gxNecesitaUbi=(enc,m)=>m.h.gridProperties.columnCount<GG.TPL||enc[GG.UBI-1]!==GG.ENC[GG.UBI-1]||enc[GG.GRP-1]!==GG.ENC[GG.GRP-1]||enc[GG.TPL-1]!==GG.ENC[GG.TPL-1]||enc[GG.TMC-1]!==GG.ENC[GG.TMC-1]||enc[12]!==GG.ENC[12];
+const gxNecesitaCols=(enc,m)=>m.h.gridProperties.columnCount<GG.NC||GG.ENC.slice(GG.UBI-1).some((h,k)=>enc[GG.UBI-1+k]!==h)||enc[GG.TMC-1]!==GG.ENC[GG.TMC-1]||enc[12]!==GG.ENC[12];
 async function gxEstructura(m,rows){const sid=m.h.sheetId,t=m.h.title,req=[];let cc=m.h.gridProperties.columnCount;
 if((rows[0]||[]).indexOf("Datos de la app (no editar)")===25){req.push({insertDimension:{range:{sheetId:sid,dimension:"COLUMNS",startIndex:25,endIndex:30},inheritFromBefore:true}});cc+=5;rows=rows.map(x=>{const y=x.slice();y.splice(25,0,"","","","","");return y})}
-if(cc<GG.TPL)req.push({appendDimension:{sheetId:sid,dimension:"COLUMNS",length:GG.TPL-cc}});
+if(cc<GG.NC)req.push({appendDimension:{sheetId:sid,dimension:"COLUMNS",length:GG.NC-cc}});
 await gxBatch(m.id,req);
 const data=[],fmt=[];
 for(let i=1;i<rows.length;i++){const n=i+1,rec=gxRec(rows[i][GG.JC-1]),est=rec?(rec.cancelado?"Cancelado":(rec.estado||"Recibido")):"Recibido";let pt=0;
@@ -518,187 +569,268 @@ fmt.push(...gxPintar(sid,n,est))}
 data.push({range:gxA1(t,"A1"),values:[GG.ENC.slice(0,GG.JC)]});
 fmt.push({updateSheetProperties:{properties:{sheetId:sid,gridProperties:{frozenRowCount:1}},fields:"gridProperties.frozenRowCount"}});
 await gxPut(m.id,data,true);await gxBatch(m.id,fmt)}
-async function gxPrepararUbi(m){const c=m.h.gridProperties.columnCount;
-if(c<GG.TPL)await gxBatch(m.id,[{appendDimension:{sheetId:m.h.sheetId,dimension:"COLUMNS",length:GG.TPL-c}}]);
-await gxPut(m.id,[{range:gxA1(m.h.title,gxCol(GG.UBI)+"1"),values:[GG.ENC.slice(GG.UBI-1,GG.TPL)]},{range:gxA1(m.h.title,"M1"),values:[[GG.ENC[12],GG.ENC[GG.TMC-1]]]}])}
-// Deja la hoja lista y devuelve sus filas actuales (fila 1 = encabezados).
-async function gxAsegurar(){let m=await gxMeta(true),rows=await gxFilas(m);
-if(gxNecesitaMigrar(rows[0])){await gxEstructura(m,rows);m=await gxMeta(true);rows=await gxFilas(m)}
-if(gxNecesitaUbi(rows[0],m)){await gxPrepararUbi(m);m=await gxMeta(true);rows=await gxFilas(m)}
-return{m,rows}}
-function gxBuscarFila(rows,id,pista){const u=rows.length;if(u<2)return 0;
-for(let i=1;i<u;i++){const r=gxRec(rows[i][GG.JC-1]);if(r&&r._id===id)return i+1}
-if(/^row\d+$/.test(String(id))&&pista>1&&pista<=u&&!rows[pista-1][GG.JC-1])return pista;return 0}
+// Agrega las columnas nuevas (ubicación, grupo, tipo de placa, ID y marca de cambio) y llena el ID y la marca de las filas que ya existen.
+async function gxPrepararCols(m){const c=m.h.gridProperties.columnCount,t=m.h.title;
+if(c<GG.NC)await gxBatch(m.id,[{appendDimension:{sheetId:m.h.sheetId,dimension:"COLUMNS",length:GG.NC-c}}]);
+await gxPut(m.id,[{range:gxA1(t,gxCol(GG.UBI)+"1"),values:[GG.ENC.slice(GG.UBI-1,GG.NC)]},{range:gxA1(t,"M1"),values:[[GG.ENC[12],GG.ENC[GG.TMC-1]]]}]);
+m=await gxMeta(true);const v=(await gxGet(m.id,[gxA1(t,"A1:"+gxCol(GG.NC))]))[0];
+const out=[];for(let i=1;i<v.length;i++){const x=v[i]||[];if(!x.some(c=>c!==""&&c!=null)){out.push(["",""]);continue}
+const rec=gxRec(x[GG.JC-1]);out.push([x[GG.ID-1]||(rec&&rec._id)||"",x[GG.CHG-1]||"0"])}
+if(out.length)await gxPut(m.id,[{range:gxA1(t,gxCol(GG.ID)+"2"),values:out}])}
+// Revisa los encabezados (de vez en cuando) y devuelve el índice ligero de la hoja: folio, nombre, PDF, grupo, ID y marca de cada fila.
+async function gxAsegurar(){let m=await gxMeta();
+if(!GB.hdr){let enc=(await gxGet(m.id,[gxA1(m.h.title,"1:1")]))[0][0]||[];
+if(gxNecesitaMigrar(enc)){await gxEstructura(m,await gxFilas(m));m=await gxMeta(true);enc=(await gxGet(m.id,[gxA1(m.h.title,"1:1")]))[0][0]||[]}
+if(gxNecesitaCols(enc,m)){await gxPrepararCols(m);m=await gxMeta(true)}
+GB.hdr=true}
+return{m,ix:await gxIndice(m)}}
+async function gxIndice(m){const t=m.h.title,[a,c,y,g,id]=await gxGet(m.id,[gxA1(t,"A1:A"),gxA1(t,"C1:C"),gxA1(t,"Y1:Y"),gxA1(t,"AG1:AG"),gxA1(t,"AI1:AJ")]);
+const n=Math.max(a.length,c.length,y.length,g.length,id.length,1),v=(arr,i,k)=>{const r=arr[i]||[];const x=r[k||0];return x==null?"":x};
+const ix={n,folio:[],nombre:[],link:[],grupo:[],id:[],chg:[]};
+for(let i=0;i<n;i++){ix.folio.push(v(a,i));ix.nombre.push(v(c,i));ix.link.push(v(y,i));ix.grupo.push(String(v(g,i)));ix.id.push(String(v(id,i,0)));ix.chg.push(String(v(id,i,1)))}return ix}
+const gxBorrada=(ix,i)=>ix.folio[i]===GG.DEL;
+function gxBuscarFila(ix,id,pista){if(ix.n<2)return 0;id=String(id||"");
+if(id)for(let i=1;i<ix.n;i++)if(ix.id[i]===id&&!gxBorrada(ix,i))return i+1;
+if(/^row\d+$/.test(id)&&pista>1&&pista<=ix.n&&!ix.id[pista-1]&&!gxBorrada(ix,pista-1))return pista;return 0}
+// Lee la columna de "Datos de la app" solo de las filas que se necesitan.
+async function gxJson(m,filas){const r={};if(!filas.length)return r;const v=await gxGetMuchos(m.id,filas.map(n=>gxA1(m.h.title,gxCol(GG.JC)+n)));filas.forEach((n,k)=>{r[n]=gxRec(((v[k]||[])[0]||[])[0])});return r}
 // ----- leer (lo que antes hacía doGet) -----
+function gxCacheIni(m){if(GB.c&&GB.c.ss===m.id)return GB.c;try{const c=JSON.parse(localStorage.getItem("pa_cache")||"null");if(c&&c.v&&c.v.ss===m.id&&c.v.values&&c.v.ver){GB.c=c.v;return GB.c}}catch(e){}return null}
 async function gxLeer(q){const p={};String(q||"").split("&").forEach(s=>{const k=s.split("=");if(k[0])p[decodeURIComponent(k[0])]=decodeURIComponent(k[1]||"")});
 let m=await gxMeta();
 const intenta=async f=>{try{return await f()}catch(e){if(e.status!=400&&e.status!=404)throw e;m=await gxMeta(true);return f()}};
-if(p.solo==="folios")return intenta(async()=>({folios:(await gxGet(m.id,[gxA1(m.h.title,"A2:A")],true))[0].map(x=>x[0]===undefined?"":x[0])}));
-const leer=async()=>{const t=m.h.title,cc=m.h.gridProperties.columnCount,J=GG.JC;
-// Las fechas se piden dos veces (como número y como texto) para reconocerlas y devolverlas como aaaa-mm-dd. La columna de datos de la app no se pide dos veces.
-const rS=[gxA1(t,"A1:"+gxCol(cc))],rF=[gxA1(t,"A1:"+gxCol(Math.min(cc,J-1)))];if(cc>J)rF.push(gxA1(t,gxCol(J+1)+"1:"+gxCol(cc)));
-const gi=rS.length,gf=rF.length;if(m.g){rS.push(gxA1(m.g.title,"A1:G"));rF.push(gxA1(m.g.title,"A1:G"))}
-const [s,f]=await Promise.all([gxGet(m.id,rS,true),gxGet(m.id,rF,false)]);
-const fe=(v,w)=>typeof v=="number"&&typeof w=="string"?gxYmd(v):v;
-const main=s[0].map((row,i)=>row.map((v,j)=>fe(v,j<J-1?(f[0][i]||[])[j]:j>=J&&cc>J?(f[1][i]||[])[j-J]:undefined)));
-const grp=m.g?s[gi].map((row,i)=>row.map((v,j)=>fe(v,(f[gf][i]||[])[j]))):[];
-return{main,grp}};
+if(p.solo==="folios")return intenta(async()=>({folios:(await gxGet(m.id,[gxA1(m.h.title,"A2:A")]))[0].map(x=>x[0]===undefined?"":x[0])}));
+let ver=await intenta(()=>gxVersion(m.id));const c=gxCacheIni(m),completo=p.completo==="1";
+// 1) La hoja no cambió desde la última vez: no se descarga nada.
+if(!completo&&c&&c.ver===ver)return c;
+const extras=()=>{const r=[];if(m.g)r.push(gxA1(m.g.title,"A1:G"));if(m.u)r.push(gxA1(m.u.title,"A1:B"));return r};
+const fin=(values,ex)=>{let k=0;const gr=m.g?ex[k++]:[],ub=m.u?ex[k++]:[];
+GB.c={values,sheetUrl:m.url,grupos:gxLeerGrupos(gr.map(x=>gxFechas(x.slice(),[1,6]))),ubicaciones:gxLeerUbis(ub,!!m.u),ver,ss:m.id,at:(c&&!completo&&values===c.values)?c.at:Date.now()};return GB.c};
+// 2) Cambió poco: solo se bajan las filas cuya marca de cambio es distinta.
+if(!completo&&c&&Date.now()-(c.at||0)<1800000&&m.h.gridProperties.columnCount>=GG.NC&&(c.values[0]||[])[GG.CHG-1]===GG.ENC[GG.CHG-1]){
+const res=await intenta(()=>gxGet(m.id,[gxA1(m.h.title,gxCol(GG.ID)+"1:"+gxCol(GG.CHG))].concat(extras())));const idx=res[0],ex=res.slice(1);
+if(idx.length>=c.values.length){
+const camb=[];for(let i=1;i<idx.length;i++){const a=idx[i]||[],o=c.values[i];if(!o||String(a[1]==null?"":a[1])!==String(o[GG.CHG-1]==null?"":o[GG.CHG-1])||String(a[0]==null?"":a[0])!==String(o[GG.ID-1]==null?"":o[GG.ID-1]))camb.push(i+1)}
+if(idx.length>=c.values.length&&camb.length<=400){const rg=[];camb.forEach(n=>{const l=rg[rg.length-1];if(l&&l[1]===n-1)l[1]=n;else rg.push([n,n])});
+if(rg.length<=160){const got=rg.length?await gxGetMuchos(m.id,rg.map(x=>gxA1(m.h.title,"A"+x[0]+":"+gxCol(GG.NC)+x[1]))):[];
+const values=c.values.map(x=>x.slice());rg.forEach((x,k)=>{const filas=got[k]||[];for(let n=x[0];n<=x[1];n++){const f=(filas[n-x[0]]||[]).slice();while(f.length<GG.NC)f.push("");values[n-1]=gxFechas(f,[1,21])}});
+while(values.length<idx.length)values.push(new Array(GG.NC).fill(""));
+const r=fin(values,ex);r.at=c.at;return r}}}}
+// 3) Lectura completa (al abrir la app sin datos guardados, cada 30 minutos o con 🔄).
+const leer=()=>gxGet(m.id,[gxA1(m.h.title,"A1:"+gxCol(m.h.gridProperties.columnCount))].concat(extras()));
 let d=await intenta(leer);
-const enc=gxPad([d.main[0]||[]],GG.TPL)[0];
-if(d.main.length&&(gxNecesitaMigrar(enc)||gxNecesitaUbi(enc,m))){await gxCola(gxAsegurar);m=GB.m;d=await leer()}
-return{values:gxPad(d.main),sheetUrl:m.url,grupos:gxLeerGrupos(d.grp)}}
-function gxLeerGrupos(rows){const S=v=>v==null?"":String(v);
-return rows.slice(1).filter(x=>S(x[0]).trim()).map(x=>({nombre:S(x[0]).trim(),creado:S(x[1]),ubicacion:S(x[2]),notas:S(x[3]),link:S(x[4]),actualizado:S(x[6])}))}
+const enc=gxPad([d[0][0]||[]],GG.NC)[0];
+if(d[0].length&&(gxNecesitaMigrar(enc)||gxNecesitaCols(enc,m))){await gxCola(gxAsegurar);m=GB.m;ver=await gxVersion(m.id);d=await leer()}
+const values=gxPad(d[0],GG.NC).map((x,i)=>i?gxFechas(x,[1,21]):x);
+// Filas escritas a mano en la hoja (sin marca de cambio): se les pone "0" para que la lectura incremental las reconozca.
+if(m.h.gridProperties.columnCount>=GG.NC){const sm=[];values.forEach((x,i)=>{if(i&&!x[GG.CHG-1]&&x.some(v=>v!==""&&v!=null)){sm.push(i+1);x[GG.CHG-1]="0"}});
+if(sm.length){const mm=m;gxCola(()=>gxPut(mm.id,sm.map(n=>gxCelda(mm.h.title,n,GG.CHG,"0")))).catch(()=>{})}}
+return fin(values,d.slice(1))}
+function gxLeerGrupos(rows){const S=v=>v==null?"":String(v),vistos=new Set();
+return rows.slice(1).filter(x=>{const n=S(x[0]).trim();if(!n||n.indexOf(GG.DEL)===0||vistos.has(n))return false;vistos.add(n);return true}).map(x=>({nombre:S(x[0]).trim(),creado:S(x[1]),ubicacion:S(x[2]),notas:S(x[3]),link:S(x[4]),actualizado:S(x[6])}))}
+function gxLeerUbis(rows,hay){if(!hay)return null;const vistos=new Set(),out=[];rows.slice(1).forEach(x=>{const n=String(x[0]==null?"":x[0]).trim();if(n&&String(x[1]||"")!==GG.UBI_DEL&&!vistos.has(n)){vistos.add(n);out.push(n)}});return out}
 // ----- guardar y cambiar (lo que antes hacía doPost) -----
-async function gxPost(body){const a=await gxAsegurar(),m=a.m,rows=a.rows;
+async function gxPost(body){const a=await gxAsegurar(),m=a.m,ix=a.ix;
 switch(body.action){
-case"delete":return gxBorrar(m,rows,body);
-case"estado":return gxEstado(m,rows,body);
-case"estados":return gxEstados(m,rows,body);
-case"ubicacion":return gxCampo(m,rows,body,"ubicacion",GG.UBI);
-case"grupo":return gxCampo(m,rows,body,"grupo",GG.GRP);
-case"grupos":return gxGruposOp(m,rows,body);
-case"save":return gxGuardar(m,rows,body)}
+case"reservar":return gxReservar(m,ix,body);
+case"delete":return gxBorrar(m,ix,body);
+case"estado":return gxEstado(m,ix,body);
+case"estados":return gxEstados(m,ix,body);
+case"ubicacion":return gxCampo(m,ix,body,"ubicacion",GG.UBI);
+case"grupo":return gxCampo(m,ix,body,"grupo",GG.GRP);
+case"grupos":return gxGruposOp(m,ix,body);
+case"ubicaciones":return gxUbisOp(m,body);
+case"limpiar":return gxLimpiar(m,ix,body);
+case"save":return gxGuardar(m,ix,body)}
 return{error:"Acción desconocida"}}
-async function gxGuardar(m,rows,body){const t=m.h.title,sid=m.h.sheetId,rec=body.record;let n=0;
-if(Number(body.rowNum)>0)n=gxBuscarFila(rows,rec._id,Number(body.rowNum));
-if(n>0){const v=gxRec(rows[n-1][GG.JC-1]);if(v&&v.cancelado)return{error:"Este contrato está cancelado. Cambia su estado para modificarlo."}}
+// Folio siguiente (A-00001 … A-99999, luego B-00001 …), viendo todos los folios de la hoja.
+function gxSigFolio(folios){let ms=-1,mn=0;folios.forEach(x=>{const m=/^\s*(?:([A-Za-z])\s*[-\s]\s*)?0*(\d+)\s*$/.exec(String(x==null?"":x));if(!m)return;const si=(m[1]||"A").toUpperCase().charCodeAt(0)-65,n=parseInt(m[2],10);if(si>ms||(si==ms&&n>mn)){ms=si;mn=n}});
+if(ms<0){ms=0;mn=0}if(mn>=99999){ms++;mn=0;if(ms>25)throw new Error("Se acabaron las series de folios (A–Z).")}
+return{serie:String.fromCharCode(65+ms),folio:String(mn+1).padStart(5,"0")}}
+// Aparta un folio: agrega una fila "(reservado)" con ese folio y revisa que ningún otro teléfono haya tomado el mismo antes.
+async function gxReservar(m,ix,body){const t=m.h.title,id=String(body.id||"");if(!id)return{error:"Falta el identificador del contrato."};
+let f=gxSigFolio(ix.folio.slice(1));
+const json=()=>JSON.stringify({_id:id,_reservado:1,folio:f.folio,serie:f.serie,at:Date.now()});
+const fila=new Array(GG.NC).fill("");fila[0]=f.serie+"-"+f.folio;fila[1]=new Date().toISOString().slice(0,10);fila[2]=GG.RES;fila[GG.JC-1]=json();fila[GG.ID-1]=id;fila[GG.CHG-1]=gxStamp();
+const n=await gxAgregar(m.id,t,fila);
+for(let k=0;k<8;k++){const [a,ids]=await gxGet(m.id,[gxA1(t,"A1:A"),gxA1(t,"AI1:AI")]);const fol=a.map(x=>String((x||[])[0]==null?"":x[0])),mio=f.serie+"-"+f.folio;
+const choca=fol.some((x,i)=>i>0&&i<n-1&&x===mio&&String(((ids[i]||[])[0])||"")!==id);if(!choca)break;
+f=gxSigFolio(fol.slice(1).filter((x,i)=>i+1!==n-1));
+await gxPut(m.id,[gxCelda(t,n,1,f.serie+"-"+f.folio),gxCelda(t,n,GG.JC,json()),gxCelda(t,n,GG.CHG,gxStamp())])}
+return{ok:true,row:n,folio:f.folio,serie:f.serie}}
+async function gxGuardar(m,ix,body){const t=m.h.title,sid=m.h.sheetId,rec=body.record;let n=0;
+if(Number(body.rowNum)>0)n=gxBuscarFila(ix,rec._id,Number(body.rowNum));
+if(n>0){const v=(await gxJson(m,[n]))[n];
+if(v&&v.cancelado)return{error:"Este contrato está cancelado. Cambia su estado para modificarlo."};
+const st=ix.chg[n-1];if(body.stamp&&st&&st!==String(body.stamp)&&!(v&&v._reservado))return{error:"Otra persona modificó este contrato hace un momento. Se recargó con lo más reciente: revisa y vuelve a guardar.",conflicto:true}}
+else if(Number(body.rowNum)>0&&String(rec._id||"").indexOf("row")!==0)return{error:"Este contrato ya no está en la hoja (quizá otra persona lo eliminó)."};
 const bin=atob(body.pdf),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
 const link=await gxSubirPdf(new Blob([u8],{type:"application/pdf"}),body.filename);
-if(!(n>0))n=Math.max(rows.length,1)+1;
-const req=[];if(n>m.h.gridProperties.rowCount){req.push({appendDimension:{sheetId:sid,dimension:"ROWS",length:200}});m.h.gridProperties.rowCount+=200}
-rec._row=n;rec.pdf=link;
+const st=gxStamp();rec.pdf=link;delete rec._reservado;
 const fila=(body.row||[]).slice(0,30).map(v=>v==null?"":v);while(fila.length<30)fila.push("");
-fila[20]="";fila[24]=link;fila[29]="";fila.push(JSON.stringify(rec));
-GG.TEXTO.concat([GG.UBI,GG.GRP]).forEach(c=>req.push(gxTxt(sid,n,c)));
-req.push(...gxPintar(sid,n,rec.estado||"Recibido"));
-const raw=[{range:gxA1(t,"A"+n+":"+gxCol(GG.JC)+n),values:[fila]}];
-if(rec.ubicacion!==undefined)raw.push(gxCelda(t,n,GG.UBI,String(rec.ubicacion||"")));
-if(rec.grupo!==undefined)raw.push(gxCelda(t,n,GG.GRP,String(rec.grupo||"")));
-if(rec.tipoplaca!==undefined)raw.push(gxCelda(t,n,GG.TPL,String(rec.tipoplaca||"")));
-const ue=[gxCelda(t,n,21,"=R"+n+"-S"+n+"-T"+n+"-Z"+n),gxCelda(t,n,30,"=AB"+n+"-AC"+n)];
-[2,22].forEach(c=>{const v=fila[c-1];if(typeof v=="string"&&/^\d{4}-\d\d-\d\d$/.test(v))ue.push(gxCelda(t,n,c,v))});
-await gxBatch(m.id,req);await gxPut(m.id,raw);await gxPut(m.id,ue,true);
-if(body.oldPdf)await gxPapelera(body.oldPdf);
-return{ok:true,row:n,link}}
-async function gxBorrar(m,rows,body){let fila=gxBuscarFila(rows,body.id,Number(body.rowNum));
-if(fila<1)for(let i=1;i<rows.length;i++){if(String(rows[i][0])===String(body.folio)&&String(rows[i][2])===String(body.nombre)){fila=i+1;break}}
+fila[24]=link;
+const ubi=rec.ubicacion!==undefined?String(rec.ubicacion||""):null,grp=rec.grupo!==undefined?String(rec.grupo||""):null,tpl=rec.tipoplaca!==undefined?String(rec.tipoplaca||""):null;
+if(n>0){rec._row=n;fila[20]="";fila[29]="";fila.push(JSON.stringify(rec));
+const req=[];GG.TEXTO.concat([GG.UBI,GG.GRP]).forEach(c=>req.push(gxTxt(sid,n,c)));req.push(...gxPintar(sid,n,rec.estado||"Recibido"));
+const raw=[{range:gxA1(t,"A"+n+":"+gxCol(GG.JC)+n),values:[fila]},{range:gxA1(t,gxCol(GG.ID)+n+":"+gxCol(GG.CHG)+n),values:[[String(rec._id||""),st]]}];
+if(ubi!==null)raw.push(gxCelda(t,n,GG.UBI,ubi));if(grp!==null)raw.push(gxCelda(t,n,GG.GRP,grp));if(tpl!==null)raw.push(gxCelda(t,n,GG.TPL,tpl));
+const ue=[gxCelda(t,n,21,GG.F_SALDO),gxCelda(t,n,30,GG.F_RESTA)];[2,22].forEach(c=>{const v=fila[c-1];if(typeof v=="string"&&/^\d{4}-\d\d-\d\d$/.test(v))ue.push(gxCelda(t,n,c,v))});
+await gxBatch(m.id,req);await gxPut(m.id,raw);await gxPut(m.id,ue,true)}
+else{// Contrato nuevo sin folio apartado (versiones viejas de la app): se agrega al final en una sola operación.
+rec._row=0;fila[20]=GG.F_SALDO;fila[29]=GG.F_RESTA;fila.push(JSON.stringify(rec),ubi||"",grp||"",tpl||"",String(rec._id||""),st);
+n=await gxAgregar(m.id,t,fila);const req=[];GG.TEXTO.concat([GG.UBI,GG.GRP]).forEach(c=>req.push(gxTxt(sid,n,c)));req.push(...gxPintar(sid,n,rec.estado||"Recibido"));await gxBatch(m.id,req)}
+if(body.oldPdf&&body.oldPdf!==link)await gxPapelera(body.oldPdf);
+return{ok:true,row:n,link,stamp:st}}
+// Borrar sin recorrer filas: se marca "(eliminado)", se vacían sus datos y se oculta la fila.
+function gxMarcarBorrada(m,n,id){const t=m.h.title,fila=new Array(GG.NC).fill("");fila[0]=GG.DEL;fila[GG.JC-1]=JSON.stringify({_id:id||"",_borrado:1,at:Date.now()});fila[GG.ID-1]=id||"";fila[GG.CHG-1]=gxStamp();
+return{data:{range:gxA1(t,"A"+n+":"+gxCol(GG.NC)+n),values:[fila]},req:gxPintar(m.h.sheetId,n,"").concat([gxOcultar(m.h.sheetId,n)])}}
+async function gxBorrar(m,ix,body){let fila=gxBuscarFila(ix,body.id,Number(body.rowNum));
+if(fila<1)for(let i=1;i<ix.n;i++){if(!gxBorrada(ix,i)&&String(ix.folio[i])===String(body.folio)&&String(ix.nombre[i])===String(body.nombre)){fila=i+1;break}}
 if(fila<1)return{error:"No se encontró al cliente en la hoja (quizá ya se eliminó)."};
-const link=String(rows[fila-1][24]||body.pdf||"");
-await gxBatch(m.id,[gxBorrarFila(m.h.sheetId,fila)]);await gxPapelera(link);return{ok:true}}
-async function gxEstado(m,rows,body){const fila=gxBuscarFila(rows,body.id,Number(body.rowNum));if(fila<1)return{error:"No se encontró al cliente en la hoja."};
-const rec=gxRec(rows[fila-1][GG.JC-1]);if(!rec)return{error:"Este registro no se puede actualizar desde la app (no tiene datos internos)."};
+const link=String(ix.link[fila-1]||body.pdf||""),b=gxMarcarBorrada(m,fila,ix.id[fila-1]);
+await gxPut(m.id,[b.data]);await gxBatch(m.id,b.req);await gxPapelera(link);return{ok:true}}
+async function gxEstado(m,ix,body){const fila=gxBuscarFila(ix,body.id,Number(body.rowNum));if(fila<1)return{error:"No se encontró al cliente en la hoja."};
+const rec=(await gxJson(m,[fila]))[fila];if(!rec)return{error:"Este registro no se puede actualizar desde la app (no tiene datos internos)."};
 const est=String(body.estado||"Recibido");rec.estado=est;rec.cancelado=est==="Cancelado";rec.notaPend=est==="Pendiente"?String(body.nota||""):"";rec._row=fila;
-await gxPut(m.id,[gxCelda(m.h.title,fila,GG.JC,JSON.stringify(rec)),gxCelda(m.h.title,fila,GG.EST,est)]);
+await gxPut(m.id,[gxCelda(m.h.title,fila,GG.JC,JSON.stringify(rec)),gxCelda(m.h.title,fila,GG.EST,est),gxCelda(m.h.title,fila,GG.CHG,gxStamp())]);
 await gxBatch(m.id,gxPintar(m.h.sheetId,fila,est));return{ok:true}}
-async function gxEstados(m,rows,body){const t=m.h.title,sid=m.h.sheetId;if(rows.length<2)return{error:"No hay contratos en la hoja."};
+async function gxEstados(m,ix,body){const t=m.h.title,sid=m.h.sheetId;if(ix.n<2)return{error:"No hay contratos en la hoja."};
 const est=String(body.estado||"Recibido"),nota=est==="Pendiente"?String(body.nota||""):"",ids={};(body.ids||[]).forEach(id=>{ids[id]=true});
-const data=[],fmt=[];let n=0;
-for(let i=1;i<rows.length;i++){const rec=gxRec(rows[i][GG.JC-1]);if(!rec||!ids[rec._id])continue;
-rec.estado=est;rec.cancelado=est==="Cancelado";rec.notaPend=nota;rec._row=i+1;
-data.push(gxCelda(t,i+1,GG.JC,JSON.stringify(rec)),gxCelda(t,i+1,GG.EST,est));fmt.push(...gxPintar(sid,i+1,est));n++}
+const filas=[];for(let i=1;i<ix.n;i++)if(ix.id[i]&&ids[ix.id[i]]&&!gxBorrada(ix,i))filas.push(i+1);
+const js=await gxJson(m,filas),data=[],fmt=[];let n=0;
+filas.forEach(f=>{const rec=js[f];if(!rec)return;rec.estado=est;rec.cancelado=est==="Cancelado";rec.notaPend=nota;rec._row=f;
+data.push(gxCelda(t,f,GG.JC,JSON.stringify(rec)),gxCelda(t,f,GG.EST,est),gxCelda(t,f,GG.CHG,gxStamp()));fmt.push(...gxPintar(sid,f,est));n++});
 if(!n)return{error:"No se encontraron los contratos seleccionados (quizá ya se eliminaron)."};
 await gxPut(m.id,data);await gxBatch(m.id,fmt);return{ok:true,n}}
 // Cambia la ubicación o el grupo de uno o varios contratos.
-async function gxCampo(m,rows,body,clave,col){const t=m.h.title;if(rows.length<2)return{error:"No hay contratos en la hoja."};
+async function gxCampo(m,ix,body,clave,col){const t=m.h.title;if(ix.n<2)return{error:"No hay contratos en la hoja."};
 const v=String(body[clave]||"").trim().slice(0,80),porId={},porFila={};
 (body.items||[]).forEach(it=>{porId[it.id]=true;if(Number(it.rowNum)>1)porFila[Number(it.rowNum)]=String(it.id)});
-const data=[];let n=0;
-for(let i=1;i<rows.length;i++){const rec=gxRec(rows[i][GG.JC-1]),fila=i+1;
-const ok=rec?!!porId[rec._id]:(!rows[i][GG.JC-1]&&/^row\d+$/.test(porFila[fila]||""));if(!ok)continue;
-if(rec){rec[clave]=v;data.push(gxCelda(t,fila,GG.JC,JSON.stringify(rec)))}data.push(gxCelda(t,fila,col,v));n++}
+const filas=[],sinDatos=[];for(let i=1;i<ix.n;i++){if(gxBorrada(ix,i))continue;const id=ix.id[i],fila=i+1;
+if(id){if(porId[id])filas.push(fila)}else if(/^row\d+$/.test(porFila[fila]||""))sinDatos.push(fila)}
+const js=await gxJson(m,filas),data=[];let n=0;
+filas.forEach(f=>{const rec=js[f];if(rec){rec[clave]=v;data.push(gxCelda(t,f,GG.JC,JSON.stringify(rec)))}data.push(gxCelda(t,f,col,v),gxCelda(t,f,GG.CHG,gxStamp()));n++});
+sinDatos.forEach(f=>{data.push(gxCelda(t,f,col,v));n++});
 if(!n)return{error:"No se encontraron los contratos (quizá ya se eliminaron)."};
-await gxBatch(m.id,[gxTxt(m.h.sheetId,2,col,rows.length-1,1)]);await gxPut(m.id,data);return{ok:true,n}}
+const req=filas.concat(sinDatos).map(f=>gxTxt(m.h.sheetId,f,col));await gxBatch(m.id,req);await gxPut(m.id,data);return{ok:true,n}}
 // Cambia un dato (grupo o ubicación) de TODOS los contratos de un grupo.
-async function gxPorGrupo(m,rows,nombre,clave,col,valor){const t=m.h.title,data=[];let n=0;
-for(let i=1;i<rows.length;i++){const rec=gxRec(rows[i][GG.JC-1]),g=rec?String(rec.grupo||""):String(rows[i][GG.GRP-1]||"");if(g!==nombre)continue;
-if(rec){rec[clave]=valor;data.push(gxCelda(t,i+1,GG.JC,JSON.stringify(rec)))}data.push(gxCelda(t,i+1,col,valor));n++}
-if(n){await gxBatch(m.id,[gxTxt(m.h.sheetId,2,col,rows.length-1,1)]);await gxPut(m.id,data)}return n}
+async function gxPorGrupo(m,ix,nombre,clave,col,valor){const t=m.h.title,filas=[];
+for(let i=1;i<ix.n;i++)if(!gxBorrada(ix,i)&&ix.grupo[i]===nombre)filas.push(i+1);
+if(!filas.length)return 0;const js=await gxJson(m,filas),data=[];
+filas.forEach(f=>{const rec=js[f];if(rec){rec[clave]=valor;data.push(gxCelda(t,f,GG.JC,JSON.stringify(rec)))}data.push(gxCelda(t,f,col,valor),gxCelda(t,f,GG.CHG,gxStamp()))});
+await gxBatch(m.id,filas.map(f=>gxTxt(m.h.sheetId,f,col)));await gxPut(m.id,data);return filas.length}
 // ----- grupos -----
 async function gxHojaGrupos(m){if(m.g)return m.g;const sid=1+Math.floor(Math.random()*2e9);
-await gxBatch(m.id,[{addSheet:{properties:{sheetId:sid,title:GG.GRUPOS,gridProperties:{rowCount:1000,columnCount:26,frozenRowCount:1}}}},
+try{await gxBatch(m.id,[{addSheet:{properties:{sheetId:sid,title:GG.GRUPOS,gridProperties:{rowCount:1000,columnCount:26,frozenRowCount:1}}}},
 {repeatCell:{range:gxR(sid,1,1,1,GG.ENC_GRUPOS.length),cell:{userEnteredFormat:{textFormat:{bold:true}}},fields:"userEnteredFormat.textFormat.bold"}},
 {repeatCell:{range:{sheetId:sid,startColumnIndex:0,endColumnIndex:1},cell:{userEnteredFormat:{numberFormat:{type:"TEXT"}}},fields:"userEnteredFormat.numberFormat"}}]);
-await gxPut(m.id,[{range:gxA1(GG.GRUPOS,"A1"),values:[GG.ENC_GRUPOS]}]);
-m.g={sheetId:sid,title:GG.GRUPOS,index:99,gridProperties:{rowCount:1000,columnCount:26}};return m.g}
-async function gxGruposOp(m,rows,body){const g=await gxHojaGrupos(m),nombre=String(body.nombre||"").trim().slice(0,60);
+await gxPut(m.id,[{range:gxA1(GG.GRUPOS,"A1"),values:[GG.ENC_GRUPOS]}])}catch(e){if(e.status!=400)throw e}
+const nm=await gxMeta(true);if(!nm.g)throw new Error("No se pudo crear la pestaña de grupos.");Object.assign(m,nm);return m.g}
+async function gxGruposOp(m,ix,body){const g=await gxHojaGrupos(m),nombre=String(body.nombre||"").trim().slice(0,60);
 if(!nombre)return{error:"Falta el nombre del grupo."};
-let gr=(await gxGet(m.id,[gxA1(g.title,"A1:G")],true))[0];if(!gr.length)gr=[[]];gr=gxPad(gr,7);
+let gr=(await gxGet(m.id,[gxA1(g.title,"A1:G")]))[0];if(!gr.length)gr=[[]];gr=gxPad(gr,7);
 const fila=nm=>{for(let i=1;i<gr.length;i++)if(String(gr[i][0]).trim()===nm)return i+1;return 0};
-const asegurar=async nm=>{let f=fila(nm);if(f)return f;f=Math.max(gr.length,1)+1;const req=[];
-if(f>g.gridProperties.rowCount){req.push({appendDimension:{sheetId:g.sheetId,dimension:"ROWS",length:100}});g.gridProperties.rowCount+=100}
-req.push(gxTxt(g.sheetId,f,1));await gxBatch(m.id,req);
-await gxPut(m.id,[{range:gxA1(g.title,"A"+f+":B"+f),values:[[nm,gxAhora()]]}],true);
+const asegurar=async nm=>{let f=fila(nm);if(f)return f;f=await gxAgregar(m.id,g.title,[nm,gxAhora()]);
 while(gr.length<f)gr.push(["","","","","","",""]);gr[f-1]=[nm,"","","","","",""];return f};
 const tirar=async id=>{if(id){try{await gxFetch(GG.DRV+"/files/"+id+"?fields=id",{method:"PATCH",body:JSON.stringify({trashed:true})})}catch(e){}}};
+const quitarFila=async f=>{await gxPut(m.id,[gxCelda(g.title,f,1,GG.DEL+" "+nombre)]);await gxBatch(m.id,[gxOcultar(g.sheetId,f)])};
 const op=body.op;
 if(op==="crear"){if(fila(nombre))return{error:'Ya existe un grupo llamado "'+nombre+'".'};const f=await asegurar(nombre);let url="";try{url=await gxReporte(m,g,gr,f,nombre,body.hojas)}catch(e){}return{ok:true,url}}
 if(op==="reporte"){const f=await asegurar(nombre);return{ok:true,url:await gxReporte(m,g,gr,f,nombre,body.hojas)}}
-if(op==="ubicar"){const ubi=String(body.ubicacion||"").trim().slice(0,80),f=await asegurar(nombre);await gxPut(m.id,[gxCelda(g.title,f,3,ubi)]);return{ok:true,n:await gxPorGrupo(m,rows,nombre,"ubicacion",GG.UBI,ubi)}}
+if(op==="ubicar"){const ubi=String(body.ubicacion||"").trim().slice(0,80),f=await asegurar(nombre);await gxPut(m.id,[gxCelda(g.title,f,3,ubi)]);return{ok:true,n:await gxPorGrupo(m,ix,nombre,"ubicacion",GG.UBI,ubi)}}
 if(op==="renombrar"){const nuevo=String(body.nuevo||"").trim().slice(0,60);if(!nuevo)return{error:"Falta el nombre nuevo."};
 if(nuevo!==nombre&&fila(nuevo))return{error:'Ya existe un grupo llamado "'+nuevo+'".'};
 const f=fila(nombre);if(f){await gxPut(m.id,[gxCelda(g.title,f,1,nuevo)]);const id=String(gr[f-1][5]||"");if(id){try{await gxFetch(GG.DRV+"/files/"+id+"?fields=id",{method:"PATCH",body:JSON.stringify({name:gxTituloGrupo(nuevo)})})}catch(e){}}}else await asegurar(nuevo);
-return{ok:true,n:await gxPorGrupo(m,rows,nombre,"grupo",GG.GRP,nuevo)}}
-// Borra el grupo con TODO: filas de sus contratos, sus PDFs y el Sheet del grupo (a la papelera de Drive).
-if(op==="borrarTodo"){const ds=[];
-for(let i=1;i<rows.length;i++){const rec=gxRec(rows[i][GG.JC-1]),gn=rec?String(rec.grupo||""):String(rows[i][GG.GRP-1]||"");if(gn===nombre)ds.push({n:i+1,link:String(rows[i][24]||(rec&&rec.pdf)||"")})}
-ds.sort((a,b)=>b.n-a.n);if(ds.length){await gxBatch(m.id,ds.map(d=>gxBorrarFila(m.h.sheetId,d.n)));await Promise.all(ds.map(d=>gxPapelera(d.link)))}
-const f=fila(nombre);if(f){await tirar(String(gr[f-1][5]||""));await gxBatch(m.id,[gxBorrarFila(g.sheetId,f)])}
+return{ok:true,n:await gxPorGrupo(m,ix,nombre,"grupo",GG.GRP,nuevo)}}
+// Borra el grupo con TODO: contratos (marcados como eliminados), sus PDFs y el Sheet del grupo (a la papelera de Drive).
+if(op==="borrarTodo"){const ds=[];for(let i=1;i<ix.n;i++)if(!gxBorrada(ix,i)&&ix.grupo[i]===nombre)ds.push(i+1);
+if(ds.length){const bs=ds.map(f=>gxMarcarBorrada(m,f,ix.id[f-1]));await gxPut(m.id,bs.map(b=>b.data));await gxBatch(m.id,[].concat(...bs.map(b=>b.req)));await Promise.all(ds.map(f=>gxPapelera(ix.link[f-1])))}
+const f=fila(nombre);if(f){await tirar(String(gr[f-1][5]||""));await quitarFila(f)}
 return{ok:true,n:ds.length}}
-if(op==="borrar"){const f=fila(nombre);if(f)await gxBatch(m.id,[gxBorrarFila(g.sheetId,f)]);return{ok:true,n:await gxPorGrupo(m,rows,nombre,"grupo",GG.GRP,"")}}
+if(op==="borrar"){const f=fila(nombre);if(f)await quitarFila(f);return{ok:true,n:await gxPorGrupo(m,ix,nombre,"grupo",GG.GRP,"")}}
 return{error:"Operación de grupo desconocida."}}
-// Crea o actualiza el Sheet del grupo con las pestañas que arma la app (resumen, pedido, producción, contratos).
+// ----- ubicaciones del almacén (pestaña "Ubicaciones", la misma lista para todos) -----
+async function gxUbisOp(m,body){const nombre=String(body.nombre||"").trim().slice(0,80);if(!nombre)return{error:"Escribe el nombre de la ubicación."};
+if(!m.u){const sid=1+Math.floor(Math.random()*2e9);
+try{await gxBatch(m.id,[{addSheet:{properties:{sheetId:sid,title:GG.UBIS,gridProperties:{rowCount:300,columnCount:4,frozenRowCount:1}}}},{repeatCell:{range:{sheetId:sid,startColumnIndex:0,endColumnIndex:1},cell:{userEnteredFormat:{numberFormat:{type:"TEXT"}}},fields:"userEnteredFormat.numberFormat"}}]);
+const base=(body.base||[]).map(x=>String(x||"").trim()).filter(Boolean);await gxPut(m.id,[{range:gxA1(GG.UBIS,"A1"),values:[GG.ENC_UBIS].concat(base.map(x=>[x,""]))}])}catch(e){if(e.status!=400)throw e}
+const nm=await gxMeta(true);Object.assign(m,nm);if(!m.u)throw new Error("No se pudo crear la pestaña de ubicaciones.")}
+const t=m.u.title,v=gxPad((await gxGet(m.id,[gxA1(t,"A1:B")]))[0],2),activa=nm=>{for(let i=1;i<v.length;i++)if(String(v[i][0]).trim()===nm&&String(v[i][1])!==GG.UBI_DEL)return i+1;return 0};
+if(body.op==="agregar"){if(activa(nombre))return{error:"Ya existe la ubicación «"+nombre+"»."};await gxAgregar(m.id,t,[nombre,""]);return{ok:true}}
+if(body.op==="quitar"){const f=activa(nombre);if(!f)return{ok:true};await gxPut(m.id,[gxCelda(t,f,2,GG.UBI_DEL)]);await gxBatch(m.id,[gxOcultar(m.u.sheetId,f)]);return{ok:true}}
+return{error:"Operación desconocida."}}
+// ----- limpieza: borra de verdad las filas eliminadas y los folios apartados que no se usaron (hacerlo cuando nadie esté guardando) -----
+async function gxLimpiar(m,ix){const viejo=Date.now()-3600000,res=[];for(let i=1;i<ix.n;i++)if(ix.nombre[i]===GG.RES)res.push(i+1);
+const js=await gxJson(m,res),del=[];for(let i=1;i<ix.n;i++){const f=i+1;if(gxBorrada(ix,i))del.push(f);else if(ix.nombre[i]===GG.RES){const r=js[f];if(!r||!r._reservado||(r.at||0)<viejo)del.push(f)}}
+const desc=a=>a.sort((x,y)=>y-x);if(del.length)await gxBatch(m.id,desc(del).map(f=>gxBorrarFila(m.h.sheetId,f)));
+let ng=0;if(m.g){const gr=(await gxGet(m.id,[gxA1(m.g.title,"A1:A")]))[0],dg=[];gr.forEach((x,i)=>{if(i&&String((x||[])[0]||"").indexOf(GG.DEL)===0)dg.push(i+1)});if(dg.length)await gxBatch(m.id,desc(dg).map(f=>gxBorrarFila(m.g.sheetId,f)));ng=dg.length}
+if(m.u){const ub=(await gxGet(m.id,[gxA1(m.u.title,"A1:B")]))[0],du=[];ub.forEach((x,i)=>{if(i&&String((x||[])[1]||"")===GG.UBI_DEL)du.push(i+1)});if(du.length)await gxBatch(m.id,desc(du).map(f=>gxBorrarFila(m.u.sheetId,f)))}
+GB.c=null;return{ok:true,n:del.length,g:ng}}
+// Crea o actualiza el Sheet del grupo con las pestañas que arma la app. Todo el contenido se escribe en UNA sola operación de Google
+// (si dos teléfonos lo actualizan a la vez, uno espera al otro y el Sheet nunca queda revuelto).
 async function gxReporte(m,g,gr,fila,nombre,hojas){const titulo=gxTituloGrupo(nombre),id=String(gr[fila-1][5]||""),F="?fields="+encodeURIComponent("spreadsheetId,spreadsheetUrl,properties.title,sheets.properties(sheetId,title,index,gridProperties(rowCount,columnCount))");
 let ss=null,nuevo=false;
 if(id){try{const x=await gxFetch(GG.DRV+"/files/"+id+"?fields=id,trashed");if(x.trashed)throw new Error("papelera");ss=await gxFetch(GG.SHT+"/"+id+F);if(ss.properties.title!==titulo)await gxFetch(GG.DRV+"/files/"+id+"?fields=id",{method:"PATCH",body:JSON.stringify({name:titulo})})}catch(e){ss=null}}
 if(!ss){const c=await gxFetch(GG.DRV+"/files?fields=id",{method:"POST",body:JSON.stringify({name:titulo,mimeType:"application/vnd.google-apps.spreadsheet",parents:[await gxCarpetaGrupos()]})});ss=await gxFetch(GG.SHT+"/"+c.id+F);nuevo=true}
-const sid=ss.spreadsheetId,props=ss.sheets.map(s=>s.properties).sort((a,b)=>a.index-b.index),primera=nuevo?props[0]:null,r1=[],vals=[],r3=[],tabs=[];
+const sid=ss.spreadsheetId,props=ss.sheets.map(s=>s.properties).sort((a,b)=>a.index-b.index),primera=nuevo?props[0]:null,req=[],tabs=[];
+const celda=v=>v==null||v===""?{}:typeof v=="number"?{userEnteredValue:{numberValue:v}}:typeof v=="boolean"?{userEnteredValue:{boolValue:v}}:{userEnteredValue:{stringValue:String(v)}};
 (hojas||[]).forEach((h,k)=>{let p=props.find(x=>x.title===h.titulo);
-if(!p&&k===0&&primera){p=primera;r1.push({updateSheetProperties:{properties:{sheetId:p.sheetId,title:h.titulo},fields:"title"}});p.title=h.titulo}
-if(!p){p={sheetId:1+Math.floor(Math.random()*2e9),title:h.titulo,index:props.length,gridProperties:{rowCount:1000,columnCount:26}};r1.push({addSheet:{properties:{sheetId:p.sheetId,title:p.title,gridProperties:{rowCount:1000,columnCount:26}}}});props.push(p)}
+if(!p&&k===0&&primera){p=primera;req.push({updateSheetProperties:{properties:{sheetId:p.sheetId,title:h.titulo},fields:"title"}});p.title=h.titulo}
+if(!p){p={sheetId:1+Math.floor(Math.random()*2e9),title:h.titulo,index:props.length,gridProperties:{rowCount:1000,columnCount:26}};req.push({addSheet:{properties:{sheetId:p.sheetId,title:p.title,index:k,gridProperties:{rowCount:1000,columnCount:26}}}});props.push(p)}
 const sh=p.sheetId,all={sheetId:sh},gp=p.gridProperties;
-r1.push({unmergeCells:{range:all}},{updateCells:{range:all,fields:"userEnteredValue,userEnteredFormat"}},{updateSheetProperties:{properties:{sheetId:sh,gridProperties:{frozenRowCount:0}},fields:"gridProperties.frozenRowCount"}});
+req.push({unmergeCells:{range:all}},{updateCells:{range:all,fields:"userEnteredValue,userEnteredFormat"}},{updateSheetProperties:{properties:{sheetId:sh,gridProperties:{frozenRowCount:0}},fields:"gridProperties.frozenRowCount"}});
 const filas=h.filas||[];if(!filas.length)return;
 const ancho=filas.reduce((a,x)=>Math.max(a,x.length),1);
-const datos=filas.map(x=>{const r=x.slice(0,ancho).map(v=>v==null?"":v);while(r.length<ancho)r.push("");return r});
-if(gp.columnCount<ancho){r1.push({appendDimension:{sheetId:sh,dimension:"COLUMNS",length:ancho-gp.columnCount}});gp.columnCount=ancho}
-if(gp.rowCount<datos.length){r1.push({appendDimension:{sheetId:sh,dimension:"ROWS",length:datos.length-gp.rowCount}});gp.rowCount=datos.length}
-(h.texto||[]).forEach(c=>r1.push(gxTxt(sh,1,c,datos.length,1)));
-vals.push({range:gxA1(p.title,"A1"),values:datos});
-(h.secciones||[]).forEach(r=>r3.push(gxFmt(gxR(sh,r+1,1,1,ancho),{bold:1,size:12,bg:"#fde4de",color:"#b4232a"})));
-(h.encabezados||[]).forEach(r=>r3.push(gxFmt(gxR(sh,r+1,1,1,ancho),{bold:1,bg:"#eeeeee"})));
-(h.totales||[]).forEach(r=>r3.push(gxFmt(gxR(sh,r+1,1,1,ancho),{bold:1})));
+if(gp.columnCount<ancho){req.push({appendDimension:{sheetId:sh,dimension:"COLUMNS",length:ancho-gp.columnCount}});gp.columnCount=ancho}
+if(gp.rowCount<filas.length){req.push({appendDimension:{sheetId:sh,dimension:"ROWS",length:filas.length-gp.rowCount}});gp.rowCount=filas.length}
+(h.texto||[]).forEach(c=>req.push(gxTxt(sh,1,c,filas.length,1)));
+req.push({updateCells:{start:{sheetId:sh,rowIndex:0,columnIndex:0},rows:filas.map(x=>({values:x.slice(0,ancho).map(celda)})),fields:"userEnteredValue"}});
+(h.secciones||[]).forEach(r=>req.push(gxFmt(gxR(sh,r+1,1,1,ancho),{bold:1,size:12,bg:"#fde4de",color:"#b4232a"})));
+(h.encabezados||[]).forEach(r=>req.push(gxFmt(gxR(sh,r+1,1,1,ancho),{bold:1,bg:"#eeeeee"})));
+(h.totales||[]).forEach(r=>req.push(gxFmt(gxR(sh,r+1,1,1,ancho),{bold:1})));
 // Formato de los bloques (títulos combinados, negritas, colores y bordes).
-(h.formatos||[]).forEach(f=>{const rg=gxR(sh,f.r+1,f.c+1,f.nr||1,f.nc||1);if(f.merge)r3.push({mergeCells:{range:rg,mergeType:"MERGE_ALL"}});r3.push(gxFmt(rg,f));if(f.border)r3.push(gxBorde(rg))});
-if(h.congelar)r3.push({updateSheetProperties:{properties:{sheetId:sh,gridProperties:{frozenRowCount:h.congelar}},fields:"gridProperties.frozenRowCount"}});
-r3.push({autoResizeDimensions:{dimensions:{sheetId:sh,dimension:"COLUMNS",startIndex:0,endIndex:ancho}}});
+(h.formatos||[]).forEach(f=>{const rg=gxR(sh,f.r+1,f.c+1,f.nr||1,f.nc||1);if(f.merge)req.push({mergeCells:{range:rg,mergeType:"MERGE_ALL"}});req.push(gxFmt(rg,f));if(f.border)req.push(gxBorde(rg))});
+if(h.congelar)req.push({updateSheetProperties:{properties:{sheetId:sh,gridProperties:{frozenRowCount:h.congelar}},fields:"gridProperties.frozenRowCount"}});
+req.push({autoResizeDimensions:{dimensions:{sheetId:sh,dimension:"COLUMNS",startIndex:0,endIndex:ancho}}});
 tabs.push({sh,title:p.title,ancho})});
-await gxBatch(sid,r1);await gxPut(sid,vals);await gxBatch(sid,r3);
+await gxBatch(sid,req);
 if(tabs.length){// los títulos largos se desbordan a la derecha: ninguna columna pasa de 300 px
 const j=await gxFetch(GG.SHT+"/"+sid+"?fields="+encodeURIComponent("sheets(properties(sheetId),data(columnMetadata(pixelSize)))")+"&"+tabs.map(t=>"ranges="+encodeURIComponent(gxA1(t.title,"1:1"))).join("&"));
 const r4=[];(j.sheets||[]).forEach(s=>{const tb=tabs.find(t=>t.sh===s.properties.sheetId);if(!tb)return;(((s.data||[])[0]||{}).columnMetadata||[]).slice(0,tb.ancho).forEach((c,i)=>{if((c.pixelSize||0)>300)r4.push({updateDimensionProperties:{range:{sheetId:tb.sh,dimension:"COLUMNS",startIndex:i,endIndex:i+1},properties:{pixelSize:300},fields:"pixelSize"}})})});
 await gxBatch(sid,r4)}
 const url=ss.spreadsheetUrl;
-await gxPut(m.id,[{range:gxA1(g.title,"E"+fila+":F"+fila),values:[[url,sid]]}]);await gxPut(m.id,[gxCelda(g.title,fila,7,gxAhora())],true);
+await gxPut(m.id,[{range:gxA1(g.title,"E"+fila+":G"+fila),values:[["'"+url,"'"+sid,gxAhora()]]}],true);
 gr[fila-1][4]=url;gr[fila-1][5]=sid;return url}
-// Las acciones que cambian la hoja se hacen de una en una (como el candado del script).
+// Las acciones que cambian la hoja se hacen de una en una en cada teléfono.
 let gxQ=Promise.resolve();
 function gxCola(f){const p=gxQ.then(()=>f(),()=>f());gxQ=p.catch(()=>{});return p}
 async function api(body,q){return okj(body?await gxCola(()=>gxPost(body)):await gxLeer(q))}
 function toRow(r){const n=v=>v===""||v==null?"":+v,pt=(r.extras||[]).reduce((a,x)=>a+(+x.importe||0),0),pz=(+r.pzAbono||0)+(+r.pzAbono2||0)+(+r.pzAbono3||0);
 return[folioFull(r),r.fecha,r.nombre,r.escuela,r.carrera,r.generacion,r.celular,r.telref,r.correo,r.paquete,r.modelo,r.colormarco,placaTxt(r),r.tipomarco||r.tamano||"",r.articulos.map(a=>artTxt(r,a)).join(", "),r.numtexto,r.obs,n(r.total),n(r.pago1),n(r.pago2),"",r.entrega||"",r.extras.map(x=>`${x.pieza} ($${x.importe||0})`).join("; "),r.regalias.join(", "),"",n(r.pago3),estadoOf(r),pt||"",pz||"",""]}
-function ingest(values){const all=(values||[]).map((x,i)=>i?x.map(c=>typeof c=="string"&&/^\d{4}-\d\d-\d\dT\d\d:/.test(c)?ymd(new Date(c)):c):x);rows=all;hx={};
-recs=all.slice(1).map((x,i)=>{let r=null;try{r=JSON.parse(x[JI])}catch(e){}
+function ingest(values){const all=(values||[]).map((x,i)=>i?x.map(c=>typeof c=="string"&&/^\d{4}-\d\d-\d\dT\d\d:/.test(c)?ymd(new Date(c)):c):x);rows=all.filter((x,i)=>!i||(x[0]!=="(eliminado)"&&x[2]!=="(reservado)"));hx={};
+recs=all.slice(1).map((x,i)=>{let r=null;try{r=JSON.parse(x[JI])}catch(e){}if(x[0]==="(eliminado)"||x[2]==="(reservado)"||(r&&(r._borrado||r._reservado)))return null;
 x=x.map(c=>c==null?"":String(c));
 const fm=/^([A-Za-z])-(\d+)$/.exec(x[0]||"");if(!r)r={_id:"row"+(i+2),folio:fm?fm[2]:(x[0]||""),serie:fm?fm[1].toUpperCase():"",fecha:x[1]||"",nombre:x[2]||"",escuela:x[3]||"",carrera:x[4]||"",generacion:x[5]||"",celular:x[6]||"",telref:x[7]||"",correo:x[8]||"",paquete:x[9]||"",modelo:x[10]||"",colormarco:x[11]||"",placa:(x[12]||"").split(/\s*[+\/]\s*/).filter(Boolean),tamano:x[13]||"",articulos:(x[14]||"").split(", ").filter(Boolean),numtexto:x[15]||"",obs:x[16]||"",total:x[17]||"",pago1:x[18]||"",pago2:x[19]||"",entrega:x[21]||"",pago3:x[25]||"",estado:x[26]||"Recibido",extras:[],regalias:(x[23]||"").split(", ").filter(Boolean)};
-r._row=i+2;r.pdf=x[24]||r.pdf||"";r.ubicacion=x.length>JI+1?(x[JI+1]||""):(r.ubicacion||"");r.grupo=x.length>JI+2?(x[JI+2]||""):(r.grupo||"");
+r._row=i+2;r._stamp=x[35]==null?"":String(x[35]);r.pdf=x[24]||r.pdf||"";r.ubicacion=x.length>JI+1?(x[JI+1]||""):(r.ubicacion||"");r.grupo=x.length>JI+2?(x[JI+2]||""):(r.grupo||"");
 hx[r._id]=norm([folioFull(r),r.folio,r.nombre,r.escuela,r.carrera,r.generacion,r.paquete,estadoOf(r),(r.articulos||[]).join(" "),r.celular,r.telref,r.correo,r.numtexto,r.atendio,r.editor,(()=>{const p=payInfo(r);return p?(p.rest>0?"debe adeudo":"pagado liquidado"):""})(),ubiAct(r),ubiNone(r)?"sin ubicar":"",r.grupo].join(" "));
-return r}).filter(r=>r.nombre||r.folio)}
-function cacheSave(v){try{const s=JSON.stringify({v:{values:v.values,sheetUrl:v.sheetUrl,grupos:v.grupos}});if(s.length<3500000)localStorage.setItem("pa_cache",s)}catch(e){}}
-function cacheLoad(){try{const c=JSON.parse(localStorage.getItem("pa_cache")||"null");if(c&&c.v){SU=c.v.sheetUrl||"";GM=c.v.grupos||[];ingest(c.v.values);return true}}catch(e){}return false}
-async function load(force){if(!gxSesion()&&!gxTk.mail){gxMostrarLogin();return}
-if(loading){if(force)again=true;return}if(!force&&recs.length&&Date.now()-lastLoad<45000)return;
-loading=true;try{if(!recs.length)msg("Cargando…");const v=await api();SU=v.sheetUrl||SU;GM=v.grupos||GM;ingest(v.values);lastLoad=Date.now();cacheSave(v);gxDatosCuenta();if($("msg").textContent=="Cargando…"||$("msg").textContent.indexOf("Actualizando")==0)msg("");draw();drawTable();drawGroups()}
+return r}).filter(r=>r&&(r.nombre||r.folio))}
+function cacheSave(v){try{const s=JSON.stringify({v:{values:v.values,sheetUrl:v.sheetUrl,grupos:v.grupos,ubicaciones:v.ubicaciones||null,ver:v.ver||"",ss:v.ss||"",at:v.at||0}});if(s.length<3500000)localStorage.setItem("pa_cache",s)}catch(e){}}
+function cacheLoad(){try{const c=JSON.parse(localStorage.getItem("pa_cache")||"null");if(c&&c.v){SU=c.v.sheetUrl||"";GM=c.v.grupos||[];ingest(c.v.values);ubisSet(c.v.ubicaciones);return true}}catch(e){}return false}
+function ubisSet(l){if(Array.isArray(l)&&l.length)UBICACIONES=l.slice();else if(l===null)UBICACIONES=UBI_BASE.slice();ubiOpts();drawUbl()}
+let ubiPend="";
+function drawUbl(){const el=$("ubl");if(!el)return;const cnt={};recs.forEach(r=>{const u=ubiAct(r);if(u)cnt[u]=(cnt[u]||0)+1});
+el.innerHTML=UBICACIONES.map(u=>`<div class="ubi"><span>📍 ${esc(u)} <small>(${cnt[u]||0})</small></span><button data-u="${esc(u)}" class="${ubiPend===u?"":"s"}">${ubiPend===u?"¿Quitar?":"🗑️"}</button></div>`).join("")||'<small style="color:var(--mu)">Sin ubicaciones.</small>'}
+$("ubl").onclick=async e=>{const b=e.target.closest("button[data-u]");if(!b)return;const u=b.dataset.u;if(ubiPend!==u){ubiPend=u;drawUbl();return}ubiPend="";
+UBICACIONES=UBICACIONES.filter(x=>x!==u);ubiOpts();drawUbl();try{msg("Quitando ubicación…");await api({action:"ubicaciones",op:"quitar",nombre:u,base:UBI_BASE});await load(true);msg("Ubicación «"+u+"» quitada. Los contratos que estaban ahí conservan el dato.")}catch(x){msg("No se pudo quitar: "+err(x));load(true)}};
+$("uba").onclick=async()=>{const u=$("ubn").value.trim().slice(0,80);if(!u){$("ubn").focus();return}if(UBICACIONES.includes(u)){msg("Ya existe «"+u+"».");return}
+const base=UBICACIONES.slice();UBICACIONES=UBICACIONES.concat([u]);ubiOpts();drawUbl();$("ubn").value="";try{msg("Agregando ubicación…");await api({action:"ubicaciones",op:"agregar",nombre:u,base});await load(true);msg("Ubicación «"+u+"» agregada ✔ (ya la ven todos).")}catch(x){msg("No se pudo agregar: "+err(x));load(true)}};
+$("ubn").onkeydown=e=>{if(e.key=="Enter"){e.preventDefault();$("uba").click()}};
+let cleanPend=false;
+$("cfgclean").onclick=async()=>{if(!cleanPend){cleanPend=true;$("cfgclean").textContent="⚠️ ¿Nadie más está guardando? Toca otra vez";setTimeout(()=>{cleanPend=false;$("cfgclean").textContent="🧹 Limpiar filas eliminadas de la hoja"},5000);return}
+cleanPend=false;$("cfgclean").textContent="🧹 Limpiar filas eliminadas de la hoja";try{msg("Limpiando la hoja…");const r=await api({action:"limpiar"});await load(true,true);msg("Listo ✔: "+r.n+" fila"+(r.n==1?"":"s")+" eliminada"+(r.n==1?"":"s")+" de la hoja.")}catch(x){msg("No se pudo limpiar: "+err(x))}};
+async function load(force,completo){if(!gxSesion()&&!gxTk.mail){gxMostrarLogin();return}
+if(loading){if(force)again=true;return}if(!force&&recs.length&&Date.now()-lastLoad<15000)return;
+loading=true;try{if(!recs.length)msg("Cargando…");const v=await api(null,completo?"&completo=1":"");SU=v.sheetUrl||SU;GM=v.grupos||GM;ingest(v.values);ubisSet(v.ubicaciones);lastLoad=Date.now();cacheSave(v);gxDatosCuenta();if($("msg").textContent=="Cargando…"||$("msg").textContent.indexOf("Actualizando")==0)msg("");draw();drawTable();drawGroups()}
 catch(e){msg("No se pudo leer la hoja: "+err(e))}finally{loading=false;if(again){again=false;load(true)}}}
 async function nextFolio(){const v=await api(null,"&solo=folios");let ms=-1,mn=0;(v.folios||[]).forEach(x=>{const m=/^\s*(?:([A-Za-z])\s*[-\s]\s*)?0*(\d+)\s*$/.exec(String(x==null?"":x));if(!m)return;const si=(m[1]||"A").toUpperCase().charCodeAt(0)-65,n=parseInt(m[2],10);if(si>ms||(si==ms&&n>mn)){ms=si;mn=n}});
 if(ms<0){ms=0;mn=0}
@@ -708,16 +840,17 @@ async function save(){const r=rec();if(!r.nombre){msg("Escribe al menos el nombr
 if(r.firma2&&!r.recibe){msg("Escribe el nombre completo de quien recibe (sale en el contrato).");$("recibe").focus();return false}
 const usr=LS.get("pa_usr").trim();if(!usr){msg("Escribe tu nombre en ⚙ Ajustes para registrar quién atendió el contrato.");return false}
 if(!cur||!cur._row){r.atendio=usr;r.atendioAt=nowTs()}else{r.editor=usr;r.editorAt=nowTs()}
+if((!cur||!cur._row)&&r.paquete=="Cristal"&&r.articulos.includes("40x50")){if(!r.p40){msg("Elige si la 40x50 del paquete Cristal va en Cristal o en Premium (sección 2).");return false}if(r.p40.tipo=="Premium"&&(!r.p40.modelo||!r.p40.color)){msg("Elige el modelo y el color Premium de la 40x50 (sección 2).");return false}}
 const b=$("bsave");b.disabled=true;
-try{if(!r.folio){msg("Asignando folio…");const f=await nextFolio();r.folio=f.folio;r.serie=f.serie;$("folio").value=f.folio;$("serie").value=f.serie}
+try{if(!cur||!cur._row){if(resv&&resv.folio===r.folio){r._id=resv.id;r._row=resv.row}else if(!r.folio){msg("Apartando folio…");const f=await api({action:"reservar",id:r._id});resv={id:r._id,row:f.row,folio:f.folio,serie:f.serie};r.folio=f.folio;r.serie=f.serie;r._row=f.row;$("folio").value=f.folio;$("serie").value=f.serie}}
 stampAbonos(r,cur&&cur._row?cur:null);
 if(JSON.stringify(r).length>46000)throw new Error("El contrato tiene demasiados datos (probablemente una firma muy compleja). Borra la firma y vuelve a hacerla más simple.");
 msg("Creando PDF…");const blob=pdf(r),fn=fname(r);
 const b64=await new Promise((ok,no)=>{const f=new FileReader();f.onload=()=>ok(f.result.split(",")[1]);f.onerror=no;f.readAsDataURL(blob)});
 msg("Guardando en Google (PDF y hoja)…");
-const res=await api({action:"save",filename:fn,pdf:b64,record:r,row:toRow(r),rowNum:r._row||0,oldPdf:r.pdf||""});
-tocar(r.grupo,cur&&cur.grupo);r._row=res.row;r.pdf=res.link||r.pdf;cur=r;setLock(true);$("grupoNew").value="";fillGrpSel(r.grupo||"");grpDirty=false;ubiDirty=false;estDirty=false;renderAts(r);renderFirmas();msg("Guardado en Google Sheets ✔ · PDF en Drive ✔. Si lo necesitas en tu celular, ve a PDFs → Descargar PDF.");load(true);return true}
-catch(e){msg("No se pudo guardar: "+err(e));return false}finally{b.disabled=false}}
+const res=await api({action:"save",filename:fn,pdf:b64,record:r,row:toRow(r),rowNum:r._row||0,oldPdf:r.pdf||"",stamp:cur&&cur._row?(cur._stamp||""):""});
+tocar(r.grupo,cur&&cur.grupo);r._row=res.row;r.pdf=res.link||r.pdf;r._stamp=res.stamp||"";resv=null;cur=r;setLock(true);$("grupoNew").value="";fillGrpSel(r.grupo||"");grpDirty=false;ubiDirty=false;estDirty=false;renderAts(r);renderFirmas();msg("Guardado en Google Sheets ✔ · PDF en Drive ✔. Si lo necesitas en tu celular, ve a PDFs → Descargar PDF.");load(true);return true}
+catch(e){const m=err(e);if(/Otra persona modificó/.test(m)){await load(true);const nr=recs.find(x=>x._id==r._id);if(nr)fill(nr);msg("⚠️ "+m)}else msg("No se pudo guardar: "+m);return false}finally{b.disabled=false}}
 const fname=r=>((r.nombre||"").replace(/[\\\/:*?"<>|]+/g," ").replace(/\s+/g," ").trim()||"alumno")+".pdf";
 // ================= Listas y búsqueda =================
 function filtered(){const toks=norm($("q").value).split(/\s+/).filter(Boolean);return recs.filter(r=>(!flt||estadoOf(r)===flt)&&(!gfl||r.grupo===gfl)&&(!ufl||(ufl=="__none"?ubiNone(r):ubiAct(r)===ufl))&&toks.every(t=>(hx[r._id]||"").includes(t))).reverse()}
@@ -753,11 +886,11 @@ function openGroup(name){if(mnId)return;gCur=name;mnId="__g";mnV="gmain";pend=nu
 const gMembers=()=>recs.filter(r=>r.grupo===gCur);
 function renderGroup(){let h;if(mnV=="gnew"){$("mc").innerHTML='<h3>➕ Nuevo grupo</h3><label style="padding:0 6px">Nombre del grupo</label><input type="text" id="gname" maxlength="60" placeholder="Ej. Grupo 01 terminado"><button data-k="gok">✔ Crear grupo (sin contratos por ahora)</button><button data-k="gsel">☑️ Crear y elegir contratos ahora</button><button data-k="cer">✖️ Cerrar</button><div class="mi" style="padding-top:8px">Se crea también su Sheet en Drive (carpeta "Grupos Pixel Arte").</div>';return}
 const rs=gMembers();h=`<h3>🗂️ ${esc(gCur)}</h3><div class="mi">${rs.length} contrato${rs.length==1?"":"s"}</div>`;
-if(mnV=="gsh")h+=gUrl==="…"?'<div class="mi" style="font-size:15px;color:var(--tx)">⏳ Actualizando el Sheet del grupo… (puede tardar unos segundos)</div><button data-k="gbk">← Volver</button>':gUrl?'<div class="mi" style="font-size:15px;color:var(--tx)">✅ Sheet listo con: Resumen, Pedido de material, Producción y Contratos.</div><button data-k="gopen" class="on2">📄 Abrir Sheet</button><button data-k="gbk">← Volver</button>':'<div class="mi">No se pudo crear el Sheet. Revisa tu conexión e intenta de nuevo.</div><button data-k="gbk">← Volver</button>';
+if(mnV=="gsh")h+=gUrl==="…"?'<div class="mi" style="font-size:15px;color:var(--tx)">⏳ Actualizando el Sheet del grupo… (puede tardar unos segundos)</div><button data-k="gbk">← Volver</button>':gUrl?'<div class="mi" style="font-size:15px;color:var(--tx)">✅ Sheet listo con: Resumen, Elaboración, Pedido de material, Producción y Contratos.</div><button data-k="gopen" class="on2">📄 Abrir Sheet</button><button data-k="gbk">← Volver</button>':'<div class="mi">No se pudo crear el Sheet. Revisa tu conexión e intenta de nuevo.</div><button data-k="gbk">← Volver</button>';
 else if(mnV=="gubi")h+='<div class="mi">Mover todo el grupo a:</div>'+UBICACIONES.map((u,i)=>`<button data-k="gu:${i}">📍 ${esc(u)}</button>`).join("")+'<button data-k="gu:-">❌ Sin ubicación</button><button data-k="gbk">← Volver</button>';
 else if(mnV=="gdelall"){const on=pend==="gdx";h+=`<div class="mi" style="font-size:15px;color:var(--tx);line-height:1.5">⚠️ Esto borra <b>para siempre</b>:<br>• ${rs.length} contrato${rs.length==1?"":"s"} (sus filas en la hoja)<br>• sus PDFs (se van a la papelera de Drive)<br>• el Sheet del grupo (se va a la papelera de Drive)<br><br>Los PDFs y el Sheet se pueden recuperar de la papelera de Drive durante 30 días; los datos de la hoja no.</div><button data-k="gdx" class="${on?"on2":"dg"}">${on?"⚠️ ¿Seguro? Toca otra vez para borrar todo":"🗑️ Sí, borrar todo"}</button><button data-k="gbk">← Volver, no borrar</button>`}
 else if(mnV=="gren")h+='<label style="padding:0 6px">Nuevo nombre</label><input type="text" id="gname" maxlength="60" value="'+esc(gCur)+'"><button data-k="grs">💾 Guardar nombre</button><button data-k="gbk">← Volver</button>';
-else h+=[rs.length?["gver","👁️ Ver contratos del grupo"]:null,["gsh","📊 Sheet del grupo: actualizar y abrir"],["gubi","📍 Mover todo el grupo a…"],rs.length?["gest","🔄 Cambiar estado de todo el grupo"]:null,["gadd",rs.length?"➕ Agregar más contratos":"➕ Agregar contratos"],["gren","✏️ Cambiar nombre"],["gdel","🧹 Quitar grupo (los contratos se quedan)"],["gdelall","🗑️ Borrar grupo con TODO: contratos, PDFs y Sheet"]].filter(Boolean).map(x=>{const on=pend===x[0];return`<button data-k="${x[0]}" class="${on?"on2":x[0]=="gdel"?"dg":""}">${on?"⚠️ ¿Seguro? Toca otra vez":x[1]}</button>`}).join("")+'<button data-k="cer">✖️ Cerrar</button>';
+else h+=[rs.length?["gver","👁️ Ver contratos del grupo"]:null,rs.length?["gtab","📋 Tabla de elaboración"]:null,["gsh","📊 Sheet del grupo: actualizar y abrir"],["gubi","📍 Mover todo el grupo a…"],rs.length?["gest","🔄 Cambiar estado de todo el grupo"]:null,["gadd",rs.length?"➕ Agregar más contratos":"➕ Agregar contratos"],["gren","✏️ Cambiar nombre"],["gdel","🧹 Quitar grupo (los contratos se quedan)"],["gdelall","🗑️ Borrar grupo con TODO: contratos, PDFs y Sheet"]].filter(Boolean).map(x=>{const on=pend===x[0];return`<button data-k="${x[0]}" class="${on?"on2":x[0]=="gdel"?"dg":""}">${on?"⚠️ ¿Seguro? Toca otra vez":x[1]}</button>`}).join("")+'<button data-k="cer">✖️ Cerrar</button>';
 $("mc").innerHTML=h}
 const gPend=new Set();let gTimer=null,gAt=0,gBusy=false;
 // Marca grupos cuyo Sheet hay que actualizar; se hace en segundo plano cuando la app ya recargó los datos.
@@ -768,7 +901,30 @@ try{for(const n of ns){try{await api({action:"grupos",op:"reporte",nombre:n,hoja
 async function grpOp(b,ok){tocar(b.nuevo||b.nombre);try{msg("Guardando…");const res=await api(Object.assign({action:"grupos"},b));await load(true);msg(ok+(res&&res.n?" ("+res.n+" contrato"+(res.n==1?"":"s")+")":"")+".");return res}catch(e){msg("No se pudo: "+err(e));load(true);return null}}
 async function grpCrear(g){GM=GM.concat([{nombre:g,creado:hoy(),ubicacion:"",link:""}]);drawGroups();msg("Creando el grupo «"+g+"» y su Sheet…");try{await api({action:"grupos",op:"crear",nombre:g,hojas:grpHojas(g,[])});await load(true);msg("Grupo «"+g+"» creado ✔ (su Sheet está en Drive, carpeta «Grupos Pixel Arte»).")}catch(e){msg("No se pudo crear el grupo: "+err(e));load(true)}}
 async function grpSheet(g){try{const res=await api({action:"grupos",op:"reporte",nombre:g,hojas:grpHojas(g,recs.filter(r=>r.grupo===g))});load(true);return res.url||""}catch(e){msg("No se pudo crear el Sheet: "+err(e));return""}}
-// ----- Sheet del grupo: Resumen, Pedido de material, Producción y Contratos -----
+// ----- Tabla de elaboración (como tu formato de Excel): una fila por contrato -----
+function elabDatos(name,rs){const ABR={Individual:"IND",Agradecimiento:"AGRA",Familia:"FAM",Testimonial:"TESTIMONIAL",Amigos:"AMIGOS",Pareja:"PAREJA",Padrinos:"PADRINOS","Divertida con marco":"DIVERTIDA",Personalizador:"PERSONALIZADOR"};
+const nv=v=>+v||0,act=rs.filter(r=>estadoOf(r)!="Cancelado").sort((a,b)=>folioFull(a).localeCompare(folioFull(b),"es",{numeric:true}));
+const pzT=(r,a,pre)=>{const q=nPz(r,a),o=[];for(let i=1;i<=q;i++){const k=pzKey(a,i),f=String((r.fotos||{})[k]||"").trim(),n=String((r.notas||{})[k]||"").trim();o.push([pre,f].filter(Boolean).join(" ")+(n?"  *"+n:""))}return o};
+const datos=act.map(r=>{const ar=r.articulos||[],fotos=[];ARTS.forEach(a=>{if(ar.includes(a)&&ABR[a])fotos.push(...pzT(r,a,ABR[a]))});
+const marco=[],papel=[];let pm=0,pp=0;(r.extras||[]).forEach(x=>{if(!x.pieza&&!x.importe)return;if(/marco|cuadro|b[aá]sico|cl[aá]sico|premium|cristal/i.test(x.pieza||"")){marco.push(x.pieza||"Marco");pm+=nv(x.importe)}else{papel.push(x.pieza||"Pieza");pp+=nv(x.importe)}});
+const pq=nv(r.total)-nv(r.pago1)-nv(r.pago2)-nv(r.pago3),et=(r.extras||[]).reduce((s,x)=>s+nv(x.importe),0),ea=et-nv(r.pzAbono)-nv(r.pzAbono2)-nv(r.pzAbono3),fd=(r.fotos||{})["Panorámica"];
+const fo=String(r.folio||"").trim(),num=/^\d+$/.test(fo)?String(parseInt(fo,10)):fo;
+return{c:num+(r.serie||""),n:r.nombre||"",m:r.paquete||"",d:r.tipomarco=="Doble"?"DOBLE"+(fd?" "+fd:""):r.tipomarco=="Normal"?"NORMAL":(r.tipomarco||""),fotos,
+x40:ar.includes("40x50")?pzT(r,"40x50","40X50").join(" / ")+(p40Txt(r)?"  ["+p40Txt(r)+"]":""):"",col:ar.includes("Collage")?pzT(r,"Collage","COLLAGE").join(" / "):"",
+mar:marco.join(" · "),pm:pm||"",pap:papel.join(" · "),pp:pp||"",pg:nv(r.total)>0?(pq>0?"$"+pq.toLocaleString("es-MX"):"PAGADO"):"",ep:et>0?(ea>0?"$"+ea.toLocaleString("es-MX"):"PAGADO"):""}});
+const nF=Math.max(3,...datos.map(x=>x.fotos.length)),c40=5+nF,W=13+nF,tit=((/^grupo\b/i.test(name)?"":"GRUPO ")+name).toUpperCase();
+const f1=new Array(W).fill("");f1[0]=tit;f1[c40+2]="EXTRA";f1[c40+6]="PAQUETE";f1[c40+7]="EXTRA";
+const f2=["CONTRATO","NO.","NOMBRE","MODELO","DOBLE/NORMAL","FOTOS DEL PAQUETE"].concat(new Array(nF-1).fill(""),["40X50","COLLAGE","MARCO","PRECIOS","PAPEL","PRECIOS","PAGOS/ADEUDOS","PAGOS/ADEUDOS"]);
+const filas=[f1,f2].concat(datos.map((x,i)=>{const fo=x.fotos.slice();while(fo.length<nF)fo.push("");return[x.c,i+1,x.n,x.m,x.d].concat(fo,[x.x40,x.col,x.mar,x.pm,x.pap,x.pp,x.pg,x.ep])}));
+if(!datos.length)filas.push(["Aún no hay contratos en este grupo"]);
+const fm=[{r:0,c:0,nc:c40+1,merge:1,bold:1,center:1,size:12,bg:"#fde4de",color:"#b4232a"},{r:0,c:c40+2,nc:4,merge:1,bold:1,center:1,bg:"#eeeeee"},{r:0,c:c40+6,bold:1,center:1,bg:"#eeeeee"},{r:0,c:c40+7,bold:1,center:1,bg:"#eeeeee"},
+{r:1,c:0,nc:W,bold:1,center:1,bg:"#eeeeee"},{r:1,c:5,nc:nF,merge:1},{r:0,c:0,nr:filas.length,nc:W,border:1}];
+return{titulo:"Elaboración",filas,secciones:[],encabezados:[],totales:[],formatos:fm,congelar:2,texto:[1]}}
+function elabHTML(name,rs){const t=elabDatos(name,rs),W=t.filas.reduce((a,x)=>Math.max(a,x.length),1),tapa={},span={};
+t.formatos.forEach(f=>{if(!f.merge)return;span[f.r+","+f.c]=[f.nr||1,f.nc||1];for(let i=0;i<(f.nr||1);i++)for(let j=0;j<(f.nc||1);j++)if(i||j)tapa[(f.r+i)+","+(f.c+j)]=1});
+return"<table>"+t.filas.map((x,i)=>"<tr>"+Array.from({length:W},(_,j)=>{if(tapa[i+","+j])return"";const s=span[i+","+j],v=x[j]==null?"":x[j],tg=i<2?"th":"td";
+return`<${tg}${s?` colspan="${s[1]}" rowspan="${s[0]}"`:""}${i==0&&j==0?' class="tt"':""}>${esc(typeof v=="number"&&i>1&&j>4?"$"+v.toLocaleString("es-MX"):v)}</${tg}>`}).join("")+"</tr>").join("")+"</table>"}
+// ----- Sheet del grupo: Resumen, Elaboración, Pedido de material, Producción y Contratos -----
 function grpHojas(name,rs){const SE="(sin especificar)",val=v=>String(v==null?"":v).trim()||SE,act=rs.filter(r=>estadoOf(r)!="Cancelado");
 const pzs=r=>(r.articulos||[]).map(a=>({a,q:(r.cant||{})[a]>1?+r.cant[a]:1}));
 const byFolio=(a,b)=>folioFull(a).localeCompare(folioFull(b),"es",{numeric:true});
@@ -791,8 +947,9 @@ const pieces=[];act.forEach(r=>pzs(r).forEach(x=>pieces.push({r,a:x.a,q:x.q})));
 // Bloques por paquete + modelo + color (como tu formato): Panorámica normal, Panorámica doble e Individual siempre primero.
 M.sec("PEDIDO POR MODELO Y COLOR");
 const PORD=["Cristal","Premium","Básico","Clásico"],FIJOS=["Panorámica normal","Panorámica doble","Individual"],SINT="Panorámica (sin tipo de marco)";
+const mc=(r,a)=>a=="40x50"&&r.paquete=="Cristal"&&r.p40&&r.p40.tipo=="Premium"?["Premium",r.p40.modelo,r.p40.color]:[r.paquete,r.modelo,r.colormarco];
 const lbl=x=>x.a!="Panorámica"?x.a:x.r.tipomarco=="Doble"?"Panorámica doble":x.r.tipomarco=="Normal"?"Panorámica normal":SINT;
-const bm=new Map();pieces.forEach(x=>{const k=[val(x.r.paquete),val(x.r.modelo),val(x.r.colormarco)],id=k.join("|");if(!bm.has(id))bm.set(id,{k,c:{}});const c=bm.get(id).c,l=lbl(x);c[l]=(c[l]||0)+x.q});
+const bm=new Map();pieces.forEach(x=>{const mk=mc(x.r,x.a),k=[val(mk[0]),val(mk[1]),val(mk[2])],id=k.join("|");if(!bm.has(id))bm.set(id,{k,c:{}});const c=bm.get(id).c,l=lbl(x);c[l]=(c[l]||0)+x.q});
 const pOrd=p=>{const i=PORD.indexOf(p);return i<0?9:i};
 const blq=[...bm.values()].sort((a,b)=>pOrd(a.k[0])-pOrd(b.k[0])||(a.k[1]+" "+a.k[2]).localeCompare(b.k[1]+" "+b.k[2],"es"));
 if(!blq.length)M.add(["Aún no hay contratos en este grupo"]);
@@ -805,7 +962,7 @@ M.formatos.push({r:r0,c,nc:2,merge:1,bold:1,center:1,bg:"#fde4de",color:"#b4232a
 if(i+POR<blq.length)M.filas.push([])}
 M.sec("DETALLE EN LISTA (por artículo)");M.enc(["Artículo","Paquete","Modelo de marco","Color de marco","Tipo de marco","Piezas"]);
 const ord=a=>{const i=ARTS.indexOf(a);return i<0?99:i};
-const t1=tally(pieces,x=>[x.a,val(x.r.paquete),val(x.r.modelo),val(x.r.colormarco),val(x.r.tipomarco)],x=>x.q).sort((a,b)=>ord(a[0][0])-ord(b[0][0])||a[0].slice(1).join().localeCompare(b[0].slice(1).join(),"es"));
+const t1=tally(pieces,x=>{const mk=mc(x.r,x.a);return[x.a,val(mk[0]),val(mk[1]),val(mk[2]),val(x.r.tipomarco)]},x=>x.q).sort((a,b)=>ord(a[0][0])-ord(b[0][0])||a[0].slice(1).join().localeCompare(b[0].slice(1).join(),"es"));
 t1.forEach(x=>M.add(x[0].concat([x[1]])));M.tot(["TOTAL DE PIEZAS","","","","",pieces.reduce((a,x)=>a+x.q,0)]);
 M.sec("PLACAS (una por contrato)");M.enc(["Color de placa (1º/2º)","Tipo de placa","Placas"]);
 const conPl=act.filter(r=>(r.placa||[]).length||r.tipoplaca);tally(conPl,r=>[val(placaTxt(r)),val(r.tipoplaca)]).sort((a,b)=>b[1]-a[1]).forEach(x=>M.add(x[0].concat([x[1]])));M.tot(["TOTAL DE PLACAS","",conPl.length]);
@@ -818,13 +975,13 @@ M.sec("PIEZAS ADICIONALES");if(ex.length){M.enc(["Folio","Nombre","Pieza","Impor
 M.texto=[1];
 // Producción: un renglón por artículo de cada contrato
 const P=mkTab("Producción");P.enc(["Folio","Nombre","Artículo","Piezas","No. de foto","Paquete","Modelo de marco","Color de marco","Tipo de marco","Color de placa (1º/2º)","Tipo de placa","Núm. texto","Notas","Estado","Ubicación","Listo ✔"]);
-act.slice().sort(byFolio).forEach(r=>pzs(r).forEach(x=>{for(let i=1;i<=x.q;i++){const k=pzKey(x.a,i);P.add([folioFull(r),r.nombre,x.q>1?x.a+" ("+i+" de "+x.q+")":x.a,1,(r.fotos||{})[k]||"",r.paquete||"",r.modelo||"",r.colormarco||"",r.tipomarco||"",placaTxt(r),r.tipoplaca||"",r.numtexto||"",(r.notas||{})[k]||"",estadoOf(r),r.ubicacion||"",""])}}));
+act.slice().sort(byFolio).forEach(r=>pzs(r).forEach(x=>{for(let i=1;i<=x.q;i++){const k=pzKey(x.a,i);P.add([folioFull(r),r.nombre,x.q>1?x.a+" ("+i+" de "+x.q+")":x.a,1,(r.fotos||{})[k]||"",...mc(r,x.a).map(v=>v||""),r.tipomarco||"",placaTxt(r),r.tipoplaca||"",r.numtexto||"",(r.notas||{})[k]||"",estadoOf(r),r.ubicacion||"",""])}}));
 P.congelar=1;P.texto=[1,5];
 // Contratos
 const C=mkTab("Contratos");C.enc(["Folio","Fecha","Nombre","Escuela","Carrera","Generación","Celular","Paquete","Modelo de marco","Color de marco","Tipo de marco","Color de placa (1º/2º)","Tipo de placa","Artículos","Núm. texto","Observaciones","Regalías","Piezas adicionales","Total","Pagado","Debe","Estado","Ubicación","Entregado a","Fecha de entrega","Atendió","PDF"]);
 rs.slice().sort(byFolio).forEach(r=>{const p=pay(r);C.add([folioFull(r),r.fecha||"",r.nombre,r.escuela||"",r.carrera||"",r.generacion||"",r.celular||"",r.paquete||"",r.modelo||"",r.colormarco||"",r.tipomarco||r.tamano||"",placaTxt(r),r.tipoplaca||"",(r.articulos||[]).map(a=>artTxt(r,a)).join(", "),r.numtexto||"",r.obs||"",(r.regalias||[]).join(", "),(r.extras||[]).filter(x=>x.pieza||x.importe).map(x=>(x.pieza||"")+" ($"+(x.importe||0)+")").join("; "),p.tot,p.ab,Math.max(p.rest,0),estadoOf(r),r.ubicacion||"",r.recibe||"",r.firma2At?fts(r.firma2At):"",r.atendio||"",r.pdf||""])});
 C.congelar=1;C.texto=[1,2,6,7];
-return[R,M,P,C].map(t=>({titulo:t.titulo,filas:t.filas,secciones:t.secciones,encabezados:t.encabezados,totales:t.totales,formatos:t.formatos,congelar:t.congelar||0,texto:t.texto||[]}))}
+const E=elabDatos(name,rs);return[R,E,M,P,C].map(t=>({titulo:t.titulo,filas:t.filas,secciones:t.secciones,encabezados:t.encabezados,totales:t.totales,formatos:t.formatos,congelar:t.congelar||0,texto:t.texto||[]}))}
 async function setGrupo(rs,g){if(!rs.length)return;tocar(g,...rs.map(r=>r.grupo));g=String(g||"").trim().slice(0,60);try{msg("Guardando grupo…");rs.forEach(r=>{r.grupo=g});draw();drawGroups();const res=await api({action:"grupo",grupo:g,items:rs.map(r=>({id:r._id,rowNum:r._row||0}))});await load(true);msg(res.n+" contrato"+(res.n==1?"":"s")+" → "+(g?"🗂️ "+g:"sin grupo")+".")}catch(e){msg("No se pudo guardar el grupo: "+err(e));load(true)}}
 function renderBatch(){const n=sel.size;let h=grpCtx?`<h3>🗂️ ${esc(grpCtx)} · ${n} contrato${n==1?"":"s"}</h3>`:`<h3>${n} contrato${n==1?"":"s"} seleccionado${n==1?"":"s"}</h3>`;
 if(mnV=="bpend")h+='<label style="padding:0 6px">¿Por qué quedan pendientes? (opcional)</label><textarea id="pnote" rows="3" style="width:100%;margin:6px 0"></textarea><button data-k="bpg">💾 Marcar como pendientes</button><button data-k="bbk">← Volver</button>';
@@ -839,7 +996,7 @@ const body=rows.slice(1).filter(x=>{const s=norm(visCols(x).join(" "));return to
 $("tb").innerHTML="<tr>"+h.map(c=>`<th>${esc(c)}</th>`).join("")+"</tr>"+body.map(x=>{let cx=false;try{cx=JSON.parse(x[JI]).cancelado}catch(e){}return`<tr${cx?' style="background:#f4cccc;color:#990000"':""}>`+h.map((_,i)=>{const v=(i<JI?x[i]:x[i+1])||"";return`<td>${i==24&&v?`<a href="#" class="ou" data-u="${esc(v)}">Abrir PDF</a>`:esc(v)}</td>`}).join("")+"</tr>"}).join("")}
 $("tb").onclick=e=>{const a=e.target.closest("a.ou");if(a){e.preventDefault();openExt(a.dataset.u)}};
 $("q").oninput=deb(()=>{lim=40;draw()},150);$("q2").oninput=deb(drawTable,150);
-$("more").onclick=()=>{lim+=40;draw()};$("bref").onclick=()=>{msg("Actualizando…");load(true)};$("bref2").onclick=()=>{msg("Actualizando…");load(true)};
+$("more").onclick=()=>{lim+=40;draw()};$("bref").onclick=()=>{msg("Actualizando…");load(true,true)};$("bref2").onclick=()=>{msg("Actualizando…");load(true,true)};
 // ================= Hoja imprimible (HTML) =================
 function hojaHTML(r){const e=x=>esc(x==null?"":x);
 const fd=s=>{const m=/^(\d{4})-(\d\d)-(\d\d)/.exec(s||"");return m?m[3]+"/"+m[2]+"/"+m[1]:(s||"")};
@@ -852,7 +1009,7 @@ const k=(l,on)=>`<span class="pi"><svg class="pk" viewBox="0 0 10 10"><rect x=".
 const sec=(n,t)=>`<div class="pb"><i>${n}</i>${t}</div>`,row=x=>`<div class="pr">${x}</div>`;
 let h=`<img class="pwm" src="${WM}"><div class="ph"><div><img class="plg" src="${LOGO}"></div><div class="pad">3ra. Av. Norte Ote. #1421, Col. Centro<br>Tuxtla Gutiérrez, Chiapas<br>Tel. (961) 612 6862 · Cel. 961 233 9826</div><div class="pfo"><small>FOLIO</small><div>Nº <u>${e(r.folio)}</u> <b>${e(r.serie||"A")}</b></div><div class="pfe">Fecha: ${fd(r.fecha)}</div></div></div><div class="ptt">CONTRATO DE PRESTACIÓN DE SERVICIOS</div>`;
 h+=sec(1,"DATOS DEL CONTRATANTE")+row(c("Nombre del Alumno",r.nombre))+row(c("Escuela",r.escuela,82)+c("Carrera",r.carrera,66)+c("Generación",r.generacion,40))+row(c("Celular",r.celular,60)+c("Teléfono de referencia",r.telref,64)+c("Correo electrónico",r.correo,64));
-h+=sec(2,"PAQUETE Y MARCO")+`<div class="pc"><small>Paquete</small>${PAQ.map(p=>k(p,r.paquete==p)).join("")}</div>`+row(c("Modelo de marco",r.modelo)+c("Color de marco",r.colormarco))+row(c("Color de placa (1º/2º)",placaTxt(r),64)+c(r.tipomarco||!r.tamano?"Tipo de marco":"Tamaño del marco",r.tipomarco||r.tamano||"",62)+c("Tipo de placa",r.tipoplaca||"",62));
+h+=sec(2,"PAQUETE Y MARCO")+`<div class="pc"><small>Paquete</small>${PAQ.map(p=>k(p,r.paquete==p)).join("")}</div>`+row(c("Modelo de marco",r.modelo)+c("Color de marco",r.colormarco))+row(c("Color de placa (1º/2º)",placaTxt(r),64)+c(r.tipomarco||!r.tamano?"Tipo de marco":"Tamaño del marco",tmTxt(r),62)+c("Tipo de placa",r.tipoplaca||"",62))+(p40Txt(r)?row(c("Marco de la 40x50",p40Txt(r))):"");
 h+=sec(3,"ARTÍCULOS SELECCIONADOS")+`<div class="pg">${ARTS.map(a=>{const on=r.articulos.includes(a),fo=on?fotosTxt(r,a):"";return`<div class="pc pa">${k(a+(on&&(r.cant||{})[a]>1?" ×"+r.cant[a]:""),on)}${fo?`<span class="pn">${e(fo)}</span>`:""}</div>`}).join("")}</div>`;
 h+=sec(4,"TEXTO DE AGRADECIMIENTO")+row(c("Núm. de texto",r.numtexto,40)+c("Observaciones",r.obs,148));
 h+=sec(5,"TOTAL Y PAGOS")+row(c("TOTAL A PAGAR",money(r.total),40,"pbg")+c("ABONO 1",money(r.pago1),36,"",fts(r.pago1At,1))+c("ABONO 2",money(r.pago2),36,"",fts(r.pago2At,1))+c("ABONO 3",money(r.pago3),36,"",fts(r.pago3At,1))+cr("RESTA",rsH(tt,ab),40));
@@ -866,9 +1023,23 @@ return h}
 function fitSheet(d){const s=d.firstElementChild;d.style.cssText="display:block;position:absolute;left:-9999px;top:0;visibility:hidden";const mm=s.offsetHeight*25.4/96;d.style.cssText="";const k=Math.max(.8,Math.min(1,266/(mm||266)));s.style.setProperty("--k",String(k))}
 function imprimir(r){let d=document.getElementById("ps");if(!d){d=document.createElement("div");d.id="ps";document.body.appendChild(d)}
 d.innerHTML='<div class="sh">'+hojaHTML(r)+"</div>";fitSheet(d);msg("");setTimeout(()=>{try{window.print()}catch(e){msg("Este dispositivo no pudo abrir la impresión.")}},150)}
-function verContrato(r){pvR=r;const x=$("pvx");x.innerHTML=hojaHTML(r);x.style.transform="none";$("pv").style.display="flex";
-const w=x.offsetWidth||710,k=Math.min(1,($("pvs").clientWidth-16)/w);x.style.transform="scale("+k+")";$("pvw").style.height=((x.offsetHeight||1000)*k)+"px";swap(S.v,S.f,"pv")}
-$("pvc").onclick=()=>closeOv();$("pvp").onclick=()=>{const r=pvR;closeOv();setTimeout(()=>imprimir(r),300)};
+function pvAbrir(html,modo){const x=$("pvx");pvMode=modo;x.className="sh pvq"+(modo=="tabla"?" pvt":"");x.innerHTML=html;x.style.transform="none";$("pvp").style.display=modo=="tabla"?"none":"";$("pv").style.display="flex";
+const w=x.offsetWidth||710;pvK=Math.min(1,($("pvs").clientWidth-16)/w);pvZ=modo=="tabla"?Math.max(1,Math.min(6,.8/pvK)):1;pvAplicar(0,0);$("pvs").scrollTo(0,0);swap(S.v,S.f,"pv")}
+function verContrato(r){pvR=r;pvAbrir(hojaHTML(r),"contrato")}
+function verTabla(name,rs){pvR={tabla:name};pvAbrir(elabHTML(name,rs),"tabla")}
+// Zoom: botones ➖ ➕ ⤢, pellizcar con dos dedos o tocar dos veces.
+function pvAplicar(fx,fy){const x=$("pvx"),s=$("pvs"),w=x.offsetWidth||710,h=x.offsetHeight||1000,sc=pvK*pvZ,old=parseFloat((/scale\(([\d.]+)\)/.exec(x.style.transform)||[0,sc])[1])||sc;
+if(fx==null){fx=s.clientWidth/2;fy=s.clientHeight/2}const cx=(s.scrollLeft+fx)/old,cy=(s.scrollTop+fy)/old;
+x.style.transform="scale("+sc+")";$("pvw").style.width=(w*sc)+"px";$("pvw").style.height=(h*sc)+"px";s.scrollLeft=cx*sc-fx;s.scrollTop=cy*sc-fy}
+function pvZoom(z,fx,fy){pvZ=Math.max(1,Math.min(6,z));pvAplicar(fx,fy)}
+$("pvzi").onclick=()=>pvZoom(pvZ*1.4);$("pvzo").onclick=()=>pvZoom(pvZ/1.4);$("pvzf").onclick=()=>pvZoom(1);
+let pzI=null,tap0=0;const pvP=(t,s)=>{const b=s.getBoundingClientRect();return[(t[0].clientX+t[1].clientX)/2-b.left,(t[0].clientY+t[1].clientY)/2-b.top,Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY)]};
+$("pvs").addEventListener("touchstart",e=>{const s=$("pvs");if(e.touches.length==2){const p=pvP(e.touches,s);pzI={d:p[2],z:pvZ}}else if(e.touches.length==1){const n=Date.now();if(n-tap0<300){const b=s.getBoundingClientRect(),t=e.touches[0];pvZoom(pvZ>1.3?1:2.5,t.clientX-b.left,t.clientY-b.top);tap0=0;e.preventDefault()}else tap0=n}},{passive:false});
+$("pvs").addEventListener("touchmove",e=>{if(e.touches.length==2&&pzI){e.preventDefault();const p=pvP(e.touches,$("pvs"));pvZoom(pzI.z*p[2]/pzI.d,p[0],p[1])}},{passive:false});
+$("pvs").addEventListener("touchend",e=>{if(e.touches.length<2)pzI=null});
+$("pvs").addEventListener("wheel",e=>{if(!e.ctrlKey)return;e.preventDefault();const b=$("pvs").getBoundingClientRect();pvZoom(pvZ*(e.deltaY<0?1.15:1/1.15),e.clientX-b.left,e.clientY-b.top)},{passive:false});
+$("pvs").addEventListener("dblclick",e=>{const b=$("pvs").getBoundingClientRect();pvZoom(pvZ>1.3?1:2.5,e.clientX-b.left,e.clientY-b.top)});
+$("pvc").onclick=()=>closeOv();$("pvp").onclick=()=>{const r=pvR;if(!r||r.tabla)return;closeOv();setTimeout(()=>imprimir(r),300)};
 async function printForm(){const r=rec();if(!r.nombre){msg("Escribe al menos el nombre del alumno.");return}
 if(!r.folio){if(!(await save()))return}imprimir(rec())}
 // ================= PDF =================
@@ -906,7 +1077,7 @@ cell("Celular",r.celular,L,y,60,7.8);cell("Teléfono de referencia",r.telref,L+6
 y=sec(2,"PAQUETE Y MARCO",y);
 cell("Paquete","",L,y,W,9);PAQ.forEach((p,i)=>box(p,r.paquete==p,L+3+i*46,y+7));y+=9;
 cell("Modelo de marco",r.modelo,L,y,94,7.8);cell("Color de marco",r.colormarco,L+94,y,94,7.8);y+=7.8;
-cell("Color de placa (1º/2º)",placaTxt(r),L,y,64,9,undefined,10,undefined,"bold");cell(r.tipomarco||!r.tamano?"Tipo de marco":"Tamaño del marco",r.tipomarco||r.tamano||"",L+64,y,62,9);cell("Tipo de placa",r.tipoplaca||"",L+126,y,62,9);y+=11.4;
+cell("Color de placa (1º/2º)",placaTxt(r),L,y,64,9,undefined,10,undefined,"bold");cell(r.tipomarco||!r.tamano?"Tipo de marco":"Tamaño del marco",tmTxt(r),L+64,y,62,9);cell("Tipo de placa",r.tipoplaca||"",L+126,y,62,9);y+=9;if(p40Txt(r)){cell("Marco de la 40x50",p40Txt(r),L,y,W,7.8,undefined,9.5,undefined,"bold");y+=7.8}y+=2.4;
 y=sec(3,"ARTÍCULOS SELECCIONADOS",y);
 ARTS.forEach((a,i)=>{const x=L+(i%4)*47,yy=y+Math.floor(i/4)*6.3,on=r.articulos.includes(a),al=a+(on&&(r.cant||{})[a]>1?" ×"+r.cant[a]:"");rc(x,yy,47,6.3);box(al,on,x+2,yy+4.6,8.5,"bold");
 const fo=on?fotosTxt(r,a):"";if(fo){d.setFont("helvetica","bold");d.setFontSize(8.5);const lw=d.getTextWidth(al),av=SW(47)-2*KX-4.5-lw-4,f=fit(fo,Math.max(av,5),7,"bold");t(f[0],x+45,yy+4.6,f[1],"bold",RED,{align:"right"})}});y+=3*6.3+2.4;
@@ -966,6 +1137,7 @@ if(!existe)grpCrear(g);grpNew=g;gfl="";selPend=true;swap("vp",null);msg("Toca lo
 const rs=gMembers();
 if(k=="gbk"){mnV="gmain";pend=null;renderGroup();return}
 if(k=="gver"){gfl=gCur;ufl="";lim=40;swap("vp",null);return}
+if(k=="gtab"){verTabla(gCur,rs);return}
 if(k=="gadd"){grpNew=gCur;gfl="";selPend=true;swap("vp",null);msg("Toca los contratos que quieres agregar a «"+gCur+"» y luego ✔ Agregar.");return}
 if(k=="gubi"){mnV="gubi";pend=null;renderGroup();return}
 if(k.slice(0,3)=="gu:"){const i=k.slice(3),u=i=="-"?"":UBICACIONES[+i],g=gCur;closeOv();gMembers().forEach(r=>{r.ubicacion=u});draw();drawGroups();grpOp({op:"ubicar",nombre:g,ubicacion:u},"Grupo «"+g+"» → "+(u?"📍 "+u:"sin ubicación"));return}
@@ -1007,12 +1179,12 @@ $("bsave").onclick=save;$("bprint").onclick=printForm;$("bprt").onclick=printFor
 $("bxls").onclick=()=>{if(rows.length<2){msg("No hay clientes guardados.");return}
 const a=rows.map(x=>visCols(x));const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(a);ws["!cols"]=a[0].map(k=>({wch:Math.max(12,String(k).length+2)}));ws["!autofilter"]={ref:ws["!ref"]};
 XLSX.utils.book_append_sheet(wb,ws,"Clientes");if(AND){try{AND.guardarArchivo("Clientes_PixelArte.xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",XLSX.write(wb,{bookType:"xlsx",type:"base64"}));msg("Guardado en Descargas › Pixel Arte ✔")}catch(e){msg("No se pudo guardar el Excel.")}}else XLSX.writeFile(wb,"Clientes_PixelArte.xlsx")};
-if(!curTok())location.hash="vi";
-fill(null);
+try{history.scrollRestoration="manual"}catch(e){}if(!curTok()||!/^!/.test(curTok()))location.replace("#!vi");
+fill(null);[0,120,400].forEach(ms=>setTimeout(()=>{if(S.v=="vi"&&!S.ov)scrollTo(0,0)},ms));
 if(cacheLoad()){draw();drawTable();drawGroups();msg("Actualizando…")}
 bbCount();
 $("cfgcid").value=gxCid();if(CLIENT_ID_FIJO){$("cfgcid").style.display="none";$("cfgcid").previousElementSibling.style.display="none"}gxDatosCuenta();
-if(gxSesion()){$("gxlg").style.display="none";load(true)}else if(AND&&gxTk.mail){gxMostrarLogin();$("gxbtn").click()}else gxMostrarLogin();
+if(gxSesion()){$("gxlg").style.display="none";load(true)}else if(AND&&gxTk.mail){$("gxlg").style.display="none";gxPedir("").then(()=>load(true)).catch(e=>gxMostrarLogin(err(e)))}else gxMostrarLogin();
 // Para que funcione como app instalada (y sin internet abra la última versión).
 {const va=LS.get("pa_ver");if(va&&va!==GX_VER)setTimeout(()=>gxAviso("✨ La app se actualizó a la versión más reciente."),1200);LS.set("pa_ver",GX_VER);
 $("dbg").textContent+=" · Versión "+GX_VER+(AND?(/github\.io$/.test(location.hostname)?" (desde GitHub)":" (copia interna)"):"")}
